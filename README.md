@@ -1,2 +1,2 @@
 # Codit
-Elegant Training System
+Elegant Coding Training System
