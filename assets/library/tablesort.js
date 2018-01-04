@@ -6,7 +6,7 @@
 
 (function($) {
 	$.tablesort = function ($table, settings) {
-		var self = this;
+        var self = this;
 		this.$table = $table;
 		this.$thead = this.$table.find('thead');
 		this.settings = $.extend({}, $.tablesort.defaults, settings);
