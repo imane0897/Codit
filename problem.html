@@ -38,6 +38,11 @@
             color: whitesmoke;
             margin-top: 0.4em;
         }
+        hr.style-two {
+            border: 0;
+            height: 1px;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0.07), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.07));
+        }
     </style>
 
     <script src="assets/library/jquery.min.js"></script>
@@ -55,11 +60,25 @@
         $('table').tablesort();
         })
     ;
+
+    $('.ui.search')
+        .search({
+            apiSettings: {
+            url: '//api.github.com/search/repositories?q={query}'
+            },
+            fields: {
+            results : 'items',
+            title   : 'name',
+            url     : 'html_url'
+            },
+            minCharacters : 3
+        })
+    ;
     </script>
 </head>
 <body>
     <!-- Page Contents -->
-    <div class="ui inverted" style="padding-bottom:4em">
+    <div class="ui inverted segment">
         <div class="ui inverted menu">
             &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
             <div class="coditheader">Co<span style="color:#fbcf61;font-weight:bold">d</span>it</div>
@@ -68,39 +87,94 @@
             <a class="item">Contest</a>
             <a class="item">Discuss</a>
         </div>
-    </div>
+    </div><br><br>
+
+    
     
     <div class="ui container">
+        <div class="ui search">
+            <div class="ui icon input">
+                <input class="prompt" placeholder="&emsp;Search" type="text">
+                <i class="search icon"></i>
+            </div>
+        </div><br>
+
         <table class="ui sortable table">
             <thead>
                 <tr>
-                <th class="sorted ascending">ID</th>
+                <th class="sorted ascending" style="width:8%">ID</th>
                 <th>Title</th>
-                <th>Acceptance</th>
-                <th class="sorted ascending">Difficulty</th>
-                <th class="sorted ascending">Status</th>
+                <th class="sorted descending" style="width:8%">Acceptance</th>
+                <th class="sorted ascending" style="width:8%">Difficulty</th>
+                <th class="sorted ascending" style="width:8%">Status</th>
                 </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>1000</td>
-                <td>A + B Problem</td>
-                <td></td>
-                <td>Easy</td>
-                <td></td>
+                <tr>
+                    <td>1000</td>
+                    <td><a>A + B Problem</a></td>
+                    <td></td>
+                    <td>Easy</td>
+                    <td></td>
                 </tr><tr>
-                <td>1001</td>
-                <td>Trailing Zeros</td>
-                <td></td>
-                <td>Easy</td>
+                    <td>1001</td>
+                    <td><a>Trailing Zeros</a></td>
+                    <td></td>
+                    <td>Easy</td>
+                    <td></td>
                 </tr><tr>
-                <td>1002</td>
-                <td>Digital Counts</td>
-                <td></td>
-                <td>Medium</td>
+                    <td>1002</td>
+                    <td><a>Digital Counts</a></td>
+                    <td></td>
+                    <td>Medium</td>
+                    <td></td>
+                </tr><tr>
+                    <td>1003</td>
+                    <td><a>Ugly Number II</a></td>
+                    <td></td>
+                    <td>Medium</td>
+                    <td></td>
+                </tr><tr>
+                    <td>1004</td>
+                    <td><a>Kth Largest Element</a></td>
+                    <td></td>
+                    <td>Medium</td>
+                    <td></td>
+                </tr><tr>
+                    <td>1005</td>
+                    <td><a>Merge two sorted arrays</a></td>
+                    <td></td>
+                    <td>Easy</td>
+                    <td></td>
                 </tr>
             </tbody>
         </table>
     </div>
+
+    <div style="margin-top:1000px"></div>
+
+    <!-- footer -->
+    <div class="ui inverted vertical footer">
+        <div class="ui container">
+            <hr class="style-two"><br>
+            <div class="ui stackable inverted divided equal height stackable grid">
+                <div class="three wide column text-center">
+                    <p>Copyright &copy; 2018&ensp; Codit</p>
+                </div>
+                <div class="four wide column">
+                </div>
+                <div class="two wide column text-center">
+                    <p>Contact&nbsp; Us</p>
+                </div>
+                <div class="four wide column text-center">
+                    <p>Frequently&nbsp; Asked&nbsp; Questions</p>
+                </div>
+                <div class="three wide column text-center">
+                    <p>Terms&nbsp; of&nbsp; Service</p>
+                </div>
+            </div>
+        </div>
+        <br>
+     </div>
 </body>
 </html>
