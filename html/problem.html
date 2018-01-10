@@ -56,11 +56,9 @@
         
         // sort table
         $('table').tablesort();
-        })
-    ;
 
-    $('.ui.search')
-        .search({
+        $('.ui.search')
+            .search({
             apiSettings: {
             url: '//api.github.com/search/repositories?q={query}'
             },
@@ -70,6 +68,8 @@
             url     : 'html_url'
             },
             minCharacters : 3
+            })
+        ;
         })
     ;
     </script>
