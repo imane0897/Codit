@@ -28,6 +28,7 @@
     <link rel="stylesheet" type="text/css" href="../semantic/dist/components/tab.css">
     <link rel="stylesheet" type="text/css" href="../semantic/dist/components/input.css">
     <link rel="stylesheet" type="text/css" href="../semantic/dist/components/dropdown.css">
+    <link rel="stylesheet" type="text/css" href="../semantic/dist/components/table.css">
 
     
     <link rel="stylesheet" href="../assets/library/codeinput.css">
@@ -43,17 +44,46 @@
             height: 1px;
             background-image: linear-gradient(to right, rgba(0, 0, 0, 0.07), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.07));
         }
+        .samplebg {
+            border-radius: 5px;
+            background-color: whitesmoke;
+        }
+        .sample {
+            text-align: left;
+            padding: 10px 0px 10px 10px;
+        }
     </style>
-
+    
+    <script src="../assets/library/jquery.min.js"></script>
     <script src="../semantic/dist/components/tab.js"></script>
     <script src="../semantic/dist/components/dropdown.js"></script>
+    <script src="../semantic/dist/components/transition.js"></script>
 
-    <script>
-    $('.menu .item')
-        .tab()
-    ;
-    $('.ui.dropdown')
-        .dropdown()
+    <script>    
+    $(document)
+        .ready(function() {
+
+        $('.ui.dropdown')
+        .dropdown({
+            values: [
+            {
+                name: 'C',
+                value: 'c',
+                selected: true
+            },
+            {
+                name: 'C++',
+                value: 'cpp'
+            },
+            {
+                name: 'Java',
+                value: 'java'
+            }
+            ]
+        })
+        ;
+    
+        })
     ;
     </script>
 
@@ -86,27 +116,25 @@
         <div class="ui bottom attached active tab segment">
             <div class="ui stackable grid">
                 <div class="twelve wide column">
-                    <h4>Description</h4>
+                    <h3>Description</h3>
                     <p>Calculate A + B.</p>
-                    <h4>Input</h4>
+                    <h3>Input</h3>
                     <p>Input contains multiple test cases.
                         Each test case contains two integers A and B.</p>
-                    <h4>Output</h4>
+                    <h3>Output</h3>
                     <p>For each test case output the sum A + B in one line.</p>
-                    <h4>Sample Input</h4>
-                    <p>1&emsp;2<br>3&emsp;4</p>
-                    <h4>Sample Output</h4>
-                    <p>3<br>7</p>
-                    <div class="ui simple dropdown">
-                        <div class="text" date-value="1">C++</div>
+                    <h3>Sample Input</h3>
+                    <div class="samplebg">
+                        <p class="sample">1&emsp;2<br>3&emsp;4</p>
+                    </div>
+                    <h3>Sample Output</h3>
+                    <div class="samplebg">
+                        <p class="sample">3<br>7</p>
+                    </div>
+                    <br>
+                    <div class="ui dropdown">
+                        <div class="text">C++</div>
                         <i class="dropdown icon"></i>
-                        <div class="menu">
-                            <div class="item" data-value="0">C</div>
-                            <div class="item" data-value="1">C++</div>
-                            <div class="item" data-value="2">Java</div>
-                            <div class="item" data-value="3">Python</div>
-                            <div class="item" data-value="4">Go</div>
-                        </div>
                     </div>
                     <br><br>
                     <div class="ui container">
@@ -120,12 +148,24 @@
                         </div>
                     </div>
                 </div>
-                <div class="three wide column" style="text-align:left">
-                    <p>Time Limit</p>
-                    <p>100 ms</p>
-                    <p>Memory Limit</p>
-                    <p>65536 kB</p>
+                <!-- TODO: Collapse table row height-->
+                <!-- <div class="three wide column">
+                    <table class="ui very basic striped table" style="text-align:center">
+                        <tbody>
+                            <tr style="height:45px"><td>Time Limit</td></tr>
+                            <tr style="height: 45px"><td>100 ms</td></tr>
+                            <tr><td>Memory Limit</td></tr>
+                            <tr><td>65536 kB</td></tr>
+                        </tbody>
+                    </table>
+                </div> -->
+                <div class="ui grid">
+                    <div class="right floated three wide column">
+                        <br><br>
+                        
+                    </div>
                 </div>
+                
             </div>
         </div>
     </div>
