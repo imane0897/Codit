@@ -52,6 +52,14 @@
             text-align: left;
             padding: 10px 0px 10px 10px;
         }
+        .posinfo {
+            text-align: center;
+        }
+        .neginfo {
+            text-align: center;
+            width: 300px;
+            background-color: whitesmoke;
+        }
     </style>
     
     <script src="../assets/library/jquery.min.js"></script>
@@ -148,21 +156,15 @@
                         </div>
                     </div>
                 </div>
-                <!-- TODO: Collapse table row height-->
-                <!-- <div class="three wide column">
-                    <table class="ui very basic striped table" style="text-align:center">
-                        <tbody>
-                            <tr style="height:45px"><td>Time Limit</td></tr>
-                            <tr style="height: 45px"><td>100 ms</td></tr>
-                            <tr><td>Memory Limit</td></tr>
-                            <tr><td>65536 kB</td></tr>
-                        </tbody>
-                    </table>
-                </div> -->
                 <div class="ui grid">
                     <div class="right floated three wide column">
                         <br><br>
-                        
+                        <table style="text-align:center; border: 1px, solid">
+                            <tr class="neginfo"><td>Time&nbsp;Limited</td></tr>
+                            <tr class="posinfo"><td>100&nbsp;ms</td></tr>
+                            <tr class="neginfo"><td>Memory&nbsp;Limit</td></tr>
+                            <tr class="posinfo"><td>65536&nbsp;kB</td></tr>
+                        </table>
                     </div>
                 </div>
                 
@@ -171,7 +173,7 @@
     </div>
 
 
-    <div style="margin-top:1000px"></div>
+    <div style="margin-top:100px"></div>
 
     <!-- footer -->
     <div class="ui inverted vertical footer">
