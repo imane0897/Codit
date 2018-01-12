@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <!-- Standard Meta -->
     <meta charset="utf-8">
@@ -25,7 +26,7 @@
     <link rel="stylesheet" type="text/css" href="semantic/dist/components/icon.css">
     <link rel="stylesheet" type="text/css" href="semantic/dist/components/sidebar.css">
     <link rel="stylesheet" type="text/css" href="semantic/dist/components/transition.css">
-    
+
 
     <link rel="stylesheet" type="text/css" href="assets/library/main.css">
     <link rel="stylesheet" type="text/css" href="assets/library/devices.css">
@@ -36,7 +37,8 @@
             font-family: "Raleway";
             src: url("assets/Raleway.ttf");
         }
-        body { 
+
+        body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         }
     </style>
@@ -47,66 +49,69 @@
     <script src="semantic/dist/components/transition.js"></script>
 
     <script>
-    $(document)
-        .ready(function() {
-    
-        // fix menu when passed
-        $('.masthead')
-            .visibility({
-            once: false,
-            onBottomPassed: function() {
-                $('.fixed.menu').transition('fade in');
-            },
-            onBottomPassedReverse: function() {
-                $('.fixed.menu').transition('fade out');
-            }
+        $(document)
+            .ready(function () {
+
+                // fix menu when passed
+                $('.masthead')
+                    .visibility({
+                        once: false,
+                        onBottomPassed: function () {
+                            $('.fixed.menu').transition('fade in');
+                        },
+                        onBottomPassedReverse: function () {
+                            $('.fixed.menu').transition('fade out');
+                        }
+                    })
+                    ;
+
+                // create sidebar and attach to menu open
+                $('.ui.sidebar')
+                    .sidebar('attach events', '.toc.item')
+                    ;
+
             })
-        ;
-    
-        // create sidebar and attach to menu open
-        $('.ui.sidebar')
-            .sidebar('attach events', '.toc.item')
-        ;
-    
-        })
-    ;
+            ;
     </script>
 </head>
+
 <body>
 
     <!-- Following Menu -->
     <div class="ui large top fixed hidden menu">
         <div class="ui container">
-            <p class="coditscroll">Co<span style="color:#fbcf61;font-weight:bold">d</span>it</p>
+            <p class="coditscroll">Co
+                <span style="color:#fbcf61;font-weight:bold">d</span>it</p>
             <div class="right menu">
                 <div class="item">
-                <a class="ui black basic button" href="login.html">Log in</a>
+                    <a class="ui black basic button" href="login.html">Log in</a>
                 </div>
                 <div class="item">
-                <a class="ui black basic button" href="signup.html">Sign Up</a>
+                    <a class="ui black basic button" href="signup.html">Sign Up</a>
                 </div>
             </div>
         </div>
     </div>
-    
-    
-    
+
+
+
     <!-- Page Contents -->
     <div class="pusher">
         <div class="ui inverted vertical masthead center aligned segment">
-    
+
             <div class="ui container">
                 <div class="ui large secondary inverted pointing menu">
                     <a class="toc item">
                     </a>
-                    <div class="codithead">Co<span style="color:#fbcf61;font-weight:bold">d</span>it</div>
+                    <div class="codithead">Co
+                        <span style="color:#fbcf61;font-weight:bold">d</span>it</div>
                     <div class="right item">
-                    <a class="ui inverted button" href="login.html" style="border-color:red">Log in</a>
-                    <a class="ui inverted button" href="signup.html">Sign Up</a>
+                        <a class="ui inverted button" href="login.html" style="border-color:red">Log in</a>
+                        <a class="ui inverted button" href="signup.html">Sign Up</a>
                     </div>
                 </div>
             </div>
-        
+
             <div class="ui container container-lrg">
                 <div class="col-12">
                     <h1 class="heading text-center">Elegant Coding Training System</h1>
@@ -140,46 +145,50 @@
         <div class="ui vertical stripe segment">
             <div class="ui middle aligned stackable grid container">
                 <div class="row">
-                <div class="eight wide column">
-                    <h3 class="ui header">Practice Your Coding Skills</h3>
-                    <p>Codit is a platform for preparing technical coding interviews. Pick from an expanding library of more than 50 questions, code and submit your solution to see if you have solved it correctly. It is <span style="font-style:italic">that</span> easy!</p>
-                    <h3 class="ui header">Keep Learning and Sharing</h3>
-                    <p>Our platform currently supports mutiple languages: C, C++, Java, Python, Go. We also provide an open forum for the discussion. You Learn whatever you want and share your knowledge to others..</p>
-                </div>
-                <div class="six wide right floated column">
-                    <img src="assets/images/bg.jpg" class="ui large bordered  image">
-                </div>
+                    <div class="eight wide column">
+                        <h3 class="ui header">Practice Your Coding Skills</h3>
+                        <p>Codit is a platform for preparing technical coding interviews. Pick from an expanding library of
+                            more than 50 questions, code and submit your solution to see if you have solved it correctly.
+                            It is
+                            <span style="font-style:italic">that</span> easy!</p>
+                        <h3 class="ui header">Keep Learning and Sharing</h3>
+                        <p>Our platform currently supports mutiple languages: C, C++, Java, Python, Go. We also provide an open
+                            forum for the discussion. You Learn whatever you want and share your knowledge to others..</p>
+                    </div>
+                    <div class="six wide right floated column">
+                        <img src="assets/images/bg.jpg" class="ui large bordered  image">
+                    </div>
                 </div>
                 <div class="row">
-                <div class="center aligned column">
-                    <a class="ui yellow huge button" href="signup.html">Getting Started&nbsp;&nbsp;❤</a>
-                </div>
+                    <div class="center aligned column">
+                        <a class="ui yellow huge button" href="signup.html">Getting Started&nbsp;&nbsp;❤</a>
+                    </div>
                 </div>
             </div>
         </div>
 
-    <!-- footer -->
-    <div class="ui inverted vertical footer segment">
-        <div class="ui container">
-            <div class="ui stackable inverted divided equal height stackable grid">
-                <div class="three wide column text-center">
-                    <p>Copyright &copy; 2018&ensp; Codit</p>
-                </div>
-                <div class="four wide column">
-                </div>
-                <div class="two wide column text-center">
-                    <p>Contact&nbsp; Us</p>
-                </div>
-                <div class="four wide column text-center">
-                    <p>Frequently&nbsp; Asked&nbsp; Questions</p>
-                </div>
-                <div class="three wide column text-center">
-                    <p>Terms&nbsp; of&nbsp; Service</p>
+        <!-- footer -->
+        <div class="ui inverted vertical footer segment">
+            <div class="ui container">
+                <div class="ui stackable inverted divided equal height stackable grid">
+                    <div class="three wide column text-center">
+                        <p>Copyright &copy; 2018&ensp; Codit</p>
+                    </div>
+                    <div class="four wide column">
+                    </div>
+                    <div class="two wide column text-center">
+                        <p>Contact&nbsp; Us</p>
+                    </div>
+                    <div class="four wide column text-center">
+                        <p>Frequently&nbsp; Asked&nbsp; Questions</p>
+                    </div>
+                    <div class="three wide column text-center">
+                        <p>Terms&nbsp; of&nbsp; Service</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    
+
 </body>
+
 </html>
-  

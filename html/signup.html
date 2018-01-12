@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <!-- Standard Meta -->
     <meta charset="utf-8" />
@@ -38,94 +39,101 @@
 
 
     <style type="text/css">
-    body {
-        background-color: #DADADA;
-    }
-    body > .grid {
-        height: 100%;
-    }
-    .image {
-        margin-top: -100px;
-    }
-    .column {
-        max-width: 450px;
-    }
+        body {
+            background-color: #DADADA;
+        }
+
+        body>.grid {
+            height: 100%;
+        }
+
+        .image {
+            margin-top: -100px;
+        }
+
+        .column {
+            max-width: 450px;
+        }
     </style>
     <script>
-    $(document)
-    .ready(function() {
-        $('.ui.form')
-        .form({
-            fields: {
-            email: {
-                identifier  : 'email',
-                rules: [
-                {
-                    type   : 'empty',
-                    prompt : 'Please enter your e-mail'
-                },
-                {
-                    type   : 'email',
-                    prompt : 'Please enter a valid e-mail'
-                }
-                ]
-            },
-            password: {
-                identifier  : 'password',
-                rules: [
-                {
-                    type   : 'empty',
-                    prompt : 'Please enter your password'
-                },
-                {
-                    type   : 'length[6]',
-                    prompt : 'Your password must be at least 6 characters'
-                }
-                ]
-            }
-            }
-        })
-        ;
-    })
-    ;
+        $(document)
+            .ready(function () {
+                $('.ui.form')
+                    .form({
+                        fields: {
+                            email: {
+                                identifier: 'email',
+                                rules: [
+                                    {
+                                        type: 'empty',
+                                        prompt: 'Please enter your e-mail'
+                                    },
+                                    {
+                                        type: 'email',
+                                        prompt: 'Please enter a valid e-mail'
+                                    }
+                                ]
+                            },
+                            password: {
+                                identifier: 'password',
+                                rules: [
+                                    {
+                                        type: 'empty',
+                                        prompt: 'Please enter your password'
+                                    },
+                                    {
+                                        type: 'length[6]',
+                                        prompt: 'Your password must be at least 6 characters'
+                                    }
+                                ]
+                            }
+                        }
+                    })
+                    ;
+            })
+            ;
     </script>
 </head>
-<body>         
+
+<body>
     <div class="ui middle aligned center aligned grid">
         <div class="column">
             <div>
-                <h2 class="ui header", style="font-size:3.5em">Co<span style="color:#fbcf61;font-weight:bold">d</span>it</h2>
+                <h2 class="ui header" , style="font-size:3.5em">Co
+                    <span style="color:#fbcf61;font-weight:bold">d</span>it</h2>
             </div>
             <h2 class="ui image header">
-            <div class="content">
-                Create a new account
-            </div>
+                <div class="content">
+                    Create a new account
+                </div>
             </h2>
             <form class="ui large form">
-            <div class="ui stacked segment">
-                <div class="field">
-                <div class="ui left icon input">
-                    <i class="user icon"></i>
-                    <input type="text" name="email" placeholder="Username">
+                <div class="ui stacked segment">
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="user icon"></i>
+                            <input type="text" name="email" placeholder="Username">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="lock icon"></i>
+                            <input type="password" name="password" placeholder="Password">
+                        </div>
+                    </div>
+                    <div class="ui fluid large yellow submit button">Login</div>
                 </div>
-                </div>
-                <div class="field">
-                <div class="ui left icon input">
-                    <i class="lock icon"></i>
-                    <input type="password" name="password" placeholder="Password">
-                </div>
-                </div>
-                <div class="ui fluid large yellow submit button">Login</div>
-            </div>
 
-            <div class="ui error message"></div>
-            
+                <div class="ui error message"></div>
+
             </form>
 
             <div class="ui message">
-            Already have an account&nbsp;?&nbsp; <a href="login.html">Log in</a>
+                Already have an account&nbsp;?&nbsp;
+                <a href="login.html">Log in</a>
             </div>
         </div>
     </div>
 </body>
+
 </html>

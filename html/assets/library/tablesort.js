@@ -4,14 +4,14 @@
 	Version 0.0.11
 */
 
-(function($) {
+(function ($) {
 	$.tablesort = function ($table, settings) {
-        var self = this;
+		var self = this;
 		this.$table = $table;
 		this.$thead = this.$table.find('thead');
 		this.settings = $.extend({}, $.tablesort.defaults, settings);
 		this.$sortCells = this.$thead.length > 0 ? this.$thead.find('th:not(.no-sort)') : this.$table.find('th:not(.no-sort)');
-		this.$sortCells.on('click.tablesort', function() {
+		this.$sortCells.on('click.tablesort', function () {
 			self.sort($(this));
 		});
 		this.index = null;
@@ -21,7 +21,7 @@
 
 	$.tablesort.prototype = {
 
-		sort: function(th, direction) {
+		sort: function (th, direction) {
 			var start = new Date(),
 				self = this,
 				table = this.$table,
@@ -31,7 +31,7 @@
 				sortBy = th.data().sortBy,
 				sortedMap = [];
 
-			var unsortedValues = cells.map(function(idx, cell) {
+			var unsortedValues = cells.map(function (idx, cell) {
 				if (sortBy)
 					return (typeof sortBy === 'function') ? sortBy($(th), $(cell), self) : sortBy;
 				return ($(this).data().sortValue != null ? $(this).data().sortValue : $(this).text());
@@ -57,10 +57,9 @@
 			self.$table.css("display");
 			// Run sorting asynchronously on a timeout to force browser redraw after
 			// `tablesort:start` callback. Also avoids locking up the browser too much.
-			setTimeout(function() {
+			setTimeout(function () {
 				self.$sortCells.removeClass(self.settings.asc + ' ' + self.settings.desc);
-				for (var i = 0, length = unsortedValues.length; i < length; i++)
-				{
+				for (var i = 0, length = unsortedValues.length; i < length; i++) {
 					sortedMap.push({
 						index: i,
 						cell: cells[i],
@@ -69,11 +68,11 @@
 					});
 				}
 
-				sortedMap.sort(function(a, b) {
+				sortedMap.sort(function (a, b) {
 					return self.settings.compare(a.value, b.value) * direction;
 				});
 
-				$.each(sortedMap, function(i, entry) {
+				$.each(sortedMap, function (i, entry) {
 					rowsContainer.append(entry.row);
 				});
 
@@ -86,13 +85,13 @@
 			}, unsortedValues.length > 2000 ? 200 : 10);
 		},
 
-		log: function(msg) {
-			if(($.tablesort.DEBUG || this.settings.debug) && console && console.log) {
+		log: function (msg) {
+			if (($.tablesort.DEBUG || this.settings.debug) && console && console.log) {
 				console.log('[tablesort] ' + msg);
 			}
 		},
 
-		destroy: function() {
+		destroy: function () {
 			this.$sortCells.off('click.tablesort');
 			this.$table.data('tablesort', null);
 			return null;
@@ -106,7 +105,7 @@
 		debug: $.tablesort.DEBUG,
 		asc: 'sorted ascending',
 		desc: 'sorted descending',
-		compare: function(a, b) {
+		compare: function (a, b) {
 			if (a > b) {
 				return 1;
 			} else if (a < b) {
@@ -117,12 +116,12 @@
 		}
 	};
 
-	$.fn.tablesort = function(settings) {
+	$.fn.tablesort = function (settings) {
 		var table, sortable, previous;
-		return this.each(function() {
+		return this.each(function () {
 			table = $(this);
 			previous = table.data('tablesort');
-			if(previous) {
+			if (previous) {
 				previous.destroy();
 			}
 			table.data('tablesort', new $.tablesort(table, settings));
