@@ -93,6 +93,13 @@
                     prompt: 'Your password must be limited to 30 characters'
                   }
                 ]
+              },
+              password2: {
+                identifier: 'password2',
+                rules: [{
+                  type: 'match[password]',
+                  prompt: 'Password do not match, please re-input'
+                }]
               }
             }
           });
@@ -117,7 +124,7 @@
           <div class="field">
             <div class="ui left icon input">
               <i class="user icon"></i>
-              <input type="text" name="email" placeholder="Username">
+              <input type="text" name="username" placeholder="Username">
             </div>
           </div>
           <div class="field">
@@ -126,7 +133,13 @@
               <input type="password" name="password" placeholder="Password">
             </div>
           </div>
-          <div class="ui fluid large yellow submit button">Login</div>
+          <div class="field">
+            <div class="ui left icon input">
+              <i class="lock icon"></i>
+              <input type="password" name="password2" placeholder="Confirm password">
+            </div>
+          </div>
+          <div class="ui fluid large yellow submit button">Signup</div>
         </div>
 
         <div class="ui error message"></div>
