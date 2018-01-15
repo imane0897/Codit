@@ -58,20 +58,6 @@
 
                 // sort table
                 $('table').tablesort();
-
-                $('.ui.search')
-                    .search({
-                        apiSettings: {
-                            url: '//api.github.com/search/repositories?q={query}'
-                        },
-                        fields: {
-                            results: 'items',
-                            title: 'name',
-                            url: 'html_url'
-                        },
-                        minCharacters: 3
-                    })
-                    ;
             })
             ;
     </script>
@@ -85,13 +71,13 @@
             <div class="coditheader">Co<span style="color:#fbcf61;font-weight:bold">d</span>it</div>
             &emsp;&emsp;&emsp;
             <a class="item">Problems</a>
+            <a class="item" href="status.html">Satus</a>
             <a class="item">Contest</a>
             <a class="item">Discuss</a>
         </div>
     </div>
     <br>
     <br>
-
 
 
     <div class="ui container">
@@ -349,7 +335,9 @@
         </table>
     </div>
 
+
     <div style="margin-top:100px"></div>
+    
 
     <!-- footer -->
     <div class="ui inverted vertical footer">
