@@ -19,25 +19,20 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/menu.css">
 
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/divider.css">
-
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/segment.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/button.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/list.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/icon.css">
-
-
-  <link rel="stylesheet" href="semantic/dist/components/form.css">
-  <link rel="stylesheet" href="semantic/dist/components/input.css">
-  <link rel="stylesheet" href="semantic/dist/components/message.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/form.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/input.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/message.css">
 
 
   <link rel="stylesheet" type="text/css" href="main.css">
 
   <script src="assets/library/jquery.min.js"></script>
-  <script src="semantic/dist/components/transition.js"></script>
   <script src="semantic/dist/components/form.js"></script>
-
-
+  
   <style type="text/css">
     body {
       background-color: #DADADA;
@@ -59,6 +54,7 @@
   <script>
     $(document)
       .ready(function () {
+
         $('.ui.form')
           .form({
             fields: {
@@ -97,9 +93,13 @@
               password2: {
                 identifier: 'password2',
                 rules: [{
-                  type: 'match[password]',
-                  prompt: 'Your passwords did not match. Please re-enter your passwords'
-                }]
+                    type: 'match[password]',
+                    prompt: 'Your passwords did not match. Please re-enter your passwords'
+                  },
+                  {
+                    type: 'empty'
+                  }
+                ]
               }
             }
           });
@@ -112,14 +112,15 @@
   <div class="ui middle aligned center aligned grid">
     <div class="column">
       <div>
-        <h2 class="ui header" , style="font-size:3.5em">Co<span style="color:#fbcf61;font-weight:bold">d</span>it</h2>
+        <h2 class="ui header" , style="font-size:3.5em">Co
+          <span style="color:#fbcf61;font-weight:bold">d</span>it</h2>
       </div>
       <h2 class="ui image header">
         <div class="content">
           Create a new account
         </div>
       </h2>
-      <form class="ui large form">
+      <form class="ui large form" method="post" action="/sign-up">
         <div class="ui stacked segment">
           <div class="field">
             <div class="ui left icon input">
@@ -139,7 +140,7 @@
               <input type="password" name="password2" placeholder="Confirm password">
             </div>
           </div>
-          <div class="ui fluid large yellow submit button">Signup</div>
+          <input type="submit" value="Sigup" class="ui fluid large yellow button"/>
         </div>
 
         <div class="ui error message"></div>
