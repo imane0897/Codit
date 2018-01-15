@@ -6,10 +6,26 @@ import (
 	"log"
 )
 
+var db *sql.DB
+
 // Member has id in 3-10 char, pwd in 6-10 char.
 type Member struct {
 	id  string
 	pwd []byte
+}
+
+func init() {
+	var err error
+	db, err = sql.Open("postgres", "postgres://root:password@localhost/codit?sslmode=disable")
+	// db, err = sql.Open("postgres", "postgres://bond:password@localhost/bookstore?sslmode=disable")
+	if err != nil {
+		panic(err)
+	}
+
+	if err = db.Ping(); err != nil {
+		panic(err)
+	}
+	log.Println("Connected to database codit")
 }
 
 func _select() {

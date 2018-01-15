@@ -16,7 +16,7 @@ var dbUsers = map[string]Member{}     // user ID, user
 var dbSessions = map[string]session{} // session ID, session
 var dbSessionsCleaned time.Time
 
-const sessionLength int = 30
+const sessionLength int = 180
 
 func getUser(w http.ResponseWriter, r *http.Request) Member {
 	// get cookie
@@ -74,7 +74,7 @@ func cleanSessions() {
 
 // for demonstration purposes
 func showSessions() {
-	fmt.Println("********")
+	fmt.Println("---session---")
 	for k, v := range dbSessions {
 		fmt.Println(k, v.un)
 	}

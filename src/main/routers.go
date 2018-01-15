@@ -1,45 +1,65 @@
 package main
 
 import (
+	"database/sql"
+	_ "github.com/lib/pq"
 	"github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
+	"html/template"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"time"
 )
 
+// LOG
+var tpl *template.Template
+
+type Book struct {
+	Isbn   string
+	Title  string
+	Author string
+	Price  float32
+}
+
+// END
+
 func main() {
 	http.Handle("/", http.FileServer(http.Dir("../../html")))
-
 	http.HandleFunc("/sign-up", signup)
 	http.HandleFunc("/log-in", login)
-	http.HandleFunc("/checkusername", checkusername)
-
+	http.HandleFunc("/status.html", showStatus)
 	http.ListenAndServe(":9090", nil)
 }
 
 func signup(w http.ResponseWriter, r *http.Request) {
 
 	// LOG
-	log.Println("truned to signup func")
-	log.Println(r.Method)
+	log.Println("---signup func---")
 	log.Println(r.FormValue("username"))
 	log.Println(r.FormValue("password"))
 	log.Println(r.FormValue("password2"))
 	// END
 
 	if alreadyLoggedIn(w, r) {
+		// LOG
+		log.Println("already logged in")
 		http.Redirect(w, r, "/catalogue.html", http.StatusSeeOther)
 		return
 	}
-	var mem Member
+
 	// process form submission
 	if r.Method == http.MethodPost {
 		// get form values
 		un := r.FormValue("username")
 		p := r.FormValue("password")
-		// TODO: username taken?
-		if _, ok := dbUsers[un]; ok {
+
+		// username taken?
+		row := db.QueryRow("SELECT * FROM members WHERE id = $1", un)
+		user := Member{}
+		err := row.Scan(&user.id, &user.pwd)
+		if err != sql.ErrNoRows {
 			http.Error(w, "Username already taken", http.StatusForbidden)
 			return
 		}
@@ -54,45 +74,59 @@ func signup(w http.ResponseWriter, r *http.Request) {
 		http.SetCookie(w, c)
 		dbSessions[c.Value] = session{un, time.Now()}
 
-		// TODO: store user in dbUsers
+		// tore user in dbUsers
 		bs, err := bcrypt.GenerateFromPassword([]byte(p), bcrypt.MinCost)
 		if err != nil {
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
-		mem = Member{un, bs}
-		dbUsers[un] = mem
+		_, err = db.Exec("INSERT INTO members (id, pwd) VALUES ($1, $2)", un, bs)
+		if err != nil {
+			http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+			return
+		}
 
 		// redirect
 		http.Redirect(w, r, "/catalogue.html", http.StatusSeeOther)
 		return
 	}
-	showSessions() // for demonstration purposes
+
 	http.Redirect(w, r, "/signup.html", http.StatusSeeOther)
 	log.Println("redirect to signup")
 }
 
 func login(w http.ResponseWriter, r *http.Request) {
 	if alreadyLoggedIn(w, r) {
+		// LOG
+		log.Println("already logged in")
 		http.Redirect(w, r, "/catalogue.html", http.StatusSeeOther)
 		return
 	}
+	// LOG
+	log.Println(r.FormValue("username"))
+	log.Println(r.FormValue("password"))
+
 	// process form submission
 	if r.Method == http.MethodPost {
 		un := r.FormValue("username")
 		p := r.FormValue("password")
+
 		// is there a username?
-		mem, ok := dbUsers[un]
-		if !ok {
+		row := db.QueryRow("SELECT * FROM members WHERE id = $1", un)
+		user := Member{}
+		err := row.Scan(&user.id, &user.pwd)
+		if err == sql.ErrNoRows {
 			http.Error(w, "Username and/or password do not match", http.StatusForbidden)
 			return
 		}
+
 		// does the entered password match the stored password?
-		err := bcrypt.CompareHashAndPassword(mem.pwd, []byte(p))
+		err = bcrypt.CompareHashAndPassword(user.pwd, []byte(p))
 		if err != nil {
 			http.Error(w, "Username and/or password do not match", http.StatusForbidden)
 			return
 		}
+
 		// create session
 		sID, _ := uuid.NewV4()
 		c := &http.Cookie{
@@ -102,6 +136,8 @@ func login(w http.ResponseWriter, r *http.Request) {
 		c.MaxAge = sessionLength
 		http.SetCookie(w, c)
 		dbSessions[c.Value] = session{un, time.Now()}
+
+		// redirect
 		http.Redirect(w, r, "/catalogue.html", http.StatusSeeOther)
 		return
 	}
@@ -109,11 +145,35 @@ func login(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/login.html", http.StatusSeeOther)
 }
 
+func showStatus(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
+		return
+	}
 
-func checkusername(w http.ResponseWriter, r *http.Request) {
-	log.Println("checked")
-	log.Println(r.Method)
-	log.Println(r.FormValue("username"))
-	log.Println(r.FormValue("password"))
-	log.Println(r.FormValue("password2"))
+	rows, err := db.Query("SELECT * FROM books")
+	if err != nil {
+		http.Error(w, http.StatusText(500), 500)
+		return
+	}
+	defer rows.Close()
+
+	bks := make([]Book, 0)
+	for rows.Next() {
+		bk := Book{}
+		err := rows.Scan(&bk.Isbn, &bk.Title, &bk.Author, &bk.Price) // order matters
+		if err != nil {
+			http.Error(w, http.StatusText(500), 500)
+			return
+		}
+		bks = append(bks, bk)
+	}
+	if err = rows.Err(); err != nil {
+		http.Error(w, http.StatusText(500), 500)
+		return
+	}
+	
+	cwd, _ := os.Getwd()
+    // fmt.Println( filepath.Join( cwd, "../../html/status.html" ) )
+	tpl.ExecuteTemplate(w, filepath.Join( cwd, "../../html/status.html" ), bks)
 }
