@@ -36,7 +36,7 @@ type ShowSubmission struct {
 	RID        int
 	Username   string
 	Problem    int
-	Result     int
+	Result     string
 	RunTime    int
 	Memory     int
 	SubmitTime string
