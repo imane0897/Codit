@@ -26,8 +26,21 @@ type Submission struct {
 	Result     int
 	RunTime    int
 	Memory     int
-	SubmitTime string
+	SubmitTime time.Time
 	Language   int
+}
+
+// ShowSubmission has the same struct of Submission but changed datatype of SubmitTime
+// and Language for template show use
+type ShowSubmission struct {
+	RID        int
+	Username   string
+	Problem    int
+	Result     int
+	RunTime    int
+	Memory     int
+	SubmitTime string
+	Language   string
 }
 
 func init() {
@@ -64,12 +77,10 @@ func _select() {
 	subs := make([]Submission, 0)
 	for rows.Next() {
 		sub := Submission{}
-		var st time.Time
-		err := rows.Scan(&sub.RID, &sub.Username, &sub.Problem, &sub.Result, &sub.RunTime, &sub.Memory, &st, &sub.Language) // order matters
+		err := rows.Scan(&sub.RID, &sub.Username, &sub.Problem, &sub.Result, &sub.RunTime, &sub.Memory, &sub.SubmitTime, &sub.Language) // order matters
 		if err != nil {
 			panic(err)
 		}
-		sub.SubmitTime = st.Format(time.RFC3339)
 		subs = append(subs, sub)
 	}
 	fmt.Println(subs)

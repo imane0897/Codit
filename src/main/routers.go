@@ -143,16 +143,25 @@ func showStatus(w http.ResponseWriter, r *http.Request) {
 	}
 	defer rows.Close()
 
-	subs := make([]Submission, 0)
+	subs := make([]ShowSubmission, 0)
 	for rows.Next() {
-		sub := Submission{}
+		sub := ShowSubmission{}
 		var st time.Time
-		err := rows.Scan(&sub.RID, &sub.Username, &sub.Problem, &sub.Result, &sub.RunTime, &sub.Memory, &st, &sub.Language) // order matters
+		var lan int
+		err := rows.Scan(&sub.RID, &sub.Username, &sub.Problem, &sub.Result, &sub.RunTime, &sub.Memory, &st, &lan)
 		if err != nil {
 			http.Error(w, http.StatusText(500), 500)
 			return
 		}
 		sub.SubmitTime = st.Format(time.RFC3339)
+		switch lan {
+		case 0:
+			sub.Language = "C"
+		case 1:
+			sub.Language = "C++"
+		case 2:
+			sub.Language = "Java"
+		}
 		subs = append(subs, sub)
 	}
 
