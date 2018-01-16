@@ -56,8 +56,7 @@
   <script src="assets/library/tablesort.js"></script>
   <script>
     $(document)
-      .ready(function () {
-      });
+      .ready(function () {});
 
   </script>
 </head>
@@ -67,7 +66,8 @@
   <div class="ui inverted segment">
     <div class="ui inverted menu">
       &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-      <div class="coditheader">Co<span style="color:#fbcf61;font-weight:bold">d</span>it</div>
+      <div class="coditheader">Co
+        <span style="color:#fbcf61;font-weight:bold">d</span>it</div>
       &emsp;&emsp;&emsp;
       <a class="item" href="catalogue.html">Problems</a>
       <a class="item">Satus</a>
@@ -79,24 +79,34 @@
   <br>
 
   <div class="ui container">
-
-
-    <!-- <table class="ui striped table" style="text-align:center">
+    <table class="ui striped table" style="text-align:center">
       <thead>
         <tr>
-          <th>RID</th>
+          <th class="sorted descending">RID</th>
           <th>USER</th>
           <th>PROBLEM</th>
+          <th>LANGUAGE</th>
           <th>RESULT</th>
           <th>TIME</th>
           <th>MEMORY</th>
           <th>SUBMIT TIME</th>
         </tr>
       </thead>
-    </table> -->
-    {{range .}}
-    <p><a href="/books/show?isbn={{.Isbn}}">{{.Isbn}}</a> - {{.Title}} - {{.Author}} - {{.Price}}</p>
-    {{end}}
+      <tbody>
+        {{range .}}
+        <tr>
+          <th>{{.RID}}</th>
+          <th>{{.Username}}</th>
+          <th>{{.Problem}}</th>
+          <th>{{.Language}}</th>
+          <th>{{.Result}}</th>
+          <th>{{.RunTime}}</th>
+          <th>{{.Memory}}</th>
+          <th>{{.SubmitTime}}</th>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
   </div>
 
   <div style="margin-top:100px"></div>

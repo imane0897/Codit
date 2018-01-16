@@ -8,22 +8,8 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"os"
-	"path/filepath"
 	"time"
 )
-
-// LOG
-var tpl *template.Template
-
-type Book struct {
-	Isbn   string
-	Title  string
-	Author string
-	Price  float32
-}
-
-// END
 
 func main() {
 	http.Handle("/", http.FileServer(http.Dir("../../html")))
@@ -40,7 +26,6 @@ func signup(w http.ResponseWriter, r *http.Request) {
 	log.Println(r.FormValue("username"))
 	log.Println(r.FormValue("password"))
 	log.Println(r.FormValue("password2"))
-	// END
 
 	if alreadyLoggedIn(w, r) {
 		// LOG
@@ -58,7 +43,7 @@ func signup(w http.ResponseWriter, r *http.Request) {
 		// username taken?
 		row := db.QueryRow("SELECT * FROM members WHERE id = $1", un)
 		user := Member{}
-		err := row.Scan(&user.id, &user.pwd)
+		err := row.Scan(&user.ID, &user.Password)
 		if err != sql.ErrNoRows {
 			http.Error(w, "Username already taken", http.StatusForbidden)
 			return
@@ -114,14 +99,14 @@ func login(w http.ResponseWriter, r *http.Request) {
 		// is there a username?
 		row := db.QueryRow("SELECT * FROM members WHERE id = $1", un)
 		user := Member{}
-		err := row.Scan(&user.id, &user.pwd)
+		err := row.Scan(&user.ID, &user.Password)
 		if err == sql.ErrNoRows {
 			http.Error(w, "Username and/or password do not match", http.StatusForbidden)
 			return
 		}
 
 		// does the entered password match the stored password?
-		err = bcrypt.CompareHashAndPassword(user.pwd, []byte(p))
+		err = bcrypt.CompareHashAndPassword(user.Password, []byte(p))
 		if err != nil {
 			http.Error(w, "Username and/or password do not match", http.StatusForbidden)
 			return
@@ -141,8 +126,8 @@ func login(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/catalogue.html", http.StatusSeeOther)
 		return
 	}
-	showSessions() // for demonstration purposes
 	http.Redirect(w, r, "/login.html", http.StatusSeeOther)
+	log.Println("redirect to login")
 }
 
 func showStatus(w http.ResponseWriter, r *http.Request) {
@@ -151,29 +136,31 @@ func showStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rows, err := db.Query("SELECT * FROM books")
+	rows, err := db.Query("SELECT * FROM submissions")
 	if err != nil {
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
 	defer rows.Close()
 
-	bks := make([]Book, 0)
+	subs := make([]Submission, 0)
 	for rows.Next() {
-		bk := Book{}
-		err := rows.Scan(&bk.Isbn, &bk.Title, &bk.Author, &bk.Price) // order matters
+		sub := Submission{}
+		var st time.Time
+		err := rows.Scan(&sub.RID, &sub.Username, &sub.Problem, &sub.Result, &sub.RunTime, &sub.Memory, &st, &sub.Language) // order matters
 		if err != nil {
 			http.Error(w, http.StatusText(500), 500)
 			return
 		}
-		bks = append(bks, bk)
+		sub.SubmitTime = st.Format(time.RFC3339)
+		subs = append(subs, sub)
 	}
+
 	if err = rows.Err(); err != nil {
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
-	
-	cwd, _ := os.Getwd()
-    // fmt.Println( filepath.Join( cwd, "../../html/status.html" ) )
-	tpl.ExecuteTemplate(w, filepath.Join( cwd, "../../html/status.html" ), bks)
+
+	tmpl := template.Must(template.ParseFiles("status.html"))
+	tmpl.Execute(w, subs)
 }
