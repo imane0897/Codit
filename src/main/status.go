@@ -13,7 +13,7 @@ func showStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rows, err := db.Query("SELECT * FROM submissions")
+	rows, err := db.Query("SELECT * FROM submissions ORDER BY rid DESC LIMIT 20")
 	if err != nil {
 		http.Error(w, http.StatusText(500), 500)
 		return
