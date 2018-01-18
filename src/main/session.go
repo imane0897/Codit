@@ -1,10 +1,11 @@
 package main
 
 import (
-	"fmt"
+	"database/sql"
 	"github.com/satori/go.uuid"
 	"net/http"
 	"time"
+	"log"
 )
 
 type session struct {
@@ -12,32 +13,33 @@ type session struct {
 	lastActivity time.Time
 }
 
-var dbUsers = map[string]Member{}     // user ID, user
-var dbSessions = map[string]session{} // session ID, session
-var dbSessionsCleaned time.Time
-
-const sessionLength int = 180
-
 func getUser(w http.ResponseWriter, r *http.Request) Member {
 	// get cookie
 	c, err := r.Cookie("session")
 	if err != nil {
-		sID, _ := uuid.NewV4()
+		sID, err := uuid.NewV4()
+		if err != nil {
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+		}
 		c = &http.Cookie{
 			Name:  "session",
 			Value: sID.String(),
 		}
-
 	}
-	c.MaxAge = sessionLength
 	http.SetCookie(w, c)
 
 	// if the user exists already, get user
+	var s Session
 	var mem Member
-	if s, ok := dbSessions[c.Value]; ok {
-		s.lastActivity = time.Now()
-		dbSessions[c.Value] = s
-		mem = dbUsers[s.un]
+	row := db.QueryRow("SELECT * FROM sessions WHERE uuid = $1", c.Value)
+	err = row.Scan(&s.uuid, &s.username)
+	if err != sql.ErrNoRows {
+		_, err = db.Exec("UPDATE sessions SET last-activity = $1 where uuid = $2", time.Now(), s.uuid)
+		if err != nil {
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+		}
+		row = db.QueryRow("SELECT * FROM members WHERE id = $1", s.username)
+		err = row.Scan(&mem.ID, &mem.Password)
 	}
 	return mem
 }
@@ -47,36 +49,21 @@ func alreadyLoggedIn(w http.ResponseWriter, r *http.Request) bool {
 	if err != nil {
 		return false
 	}
-	s, ok := dbSessions[c.Value]
-	if ok {
-		s.lastActivity = time.Now()
-		dbSessions[c.Value] = s
+
+	// check session and user
+	var s Session
+	row := db.QueryRow("SELECT * FROM sessions WHERE uuid = $1", c.Value)
+	err = row.Scan(&s.uuid, &s.username, &s.lastActivity)
+	if err != sql.ErrNoRows {
+		row = db.QueryRow("SELECT * FROM members WHERE id = $1", s.username)
+		if row != nil {
+			log.Println("already logged in")
+			return true
+		}
 	}
-	_, ok = dbUsers[s.un]
-	// refresh session
-	c.MaxAge = sessionLength
-	http.SetCookie(w, c)
-	return ok
+	return false
 }
 
 func cleanSessions() {
-	fmt.Println("BEFORE CLEAN") // for demonstration purposes
-	showSessions()              // for demonstration purposes
-	for k, v := range dbSessions {
-		if time.Now().Sub(v.lastActivity) > (time.Second * 30) {
-			delete(dbSessions, k)
-		}
-	}
-	dbSessionsCleaned = time.Now()
-	fmt.Println("AFTER CLEAN") // for demonstration purposes
-	showSessions()             // for demonstration purposes
-}
-
-// for demonstration purposes
-func showSessions() {
-	fmt.Println("---session---")
-	for k, v := range dbSessions {
-		fmt.Println(k, v.un)
-	}
-	fmt.Println("")
+	// TODO:
 }
