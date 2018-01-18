@@ -1,42 +1,42 @@
 .coditheader {
-    font-size: 1.7em;
-    color: whitesmoke;
-    margin-top: 0.4em;
-    padding-left: 3.5em;
-    padding-right: 2em;
-  }
+  font-size: 1.7em;
+  color: whitesmoke;
+  margin-top: 0.4em;
+  padding-left: 3.5em;
+  padding-right: 2em;
+}
 
-  .d {
-    color: #fbcf61;
-    font-weight: bold
-  }
+.d {
+  color: #fbcf61;
+  font-weight: bold
+}
 
-  hr.style-two {
-    border: 0;
-    height: 1px;
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.07),
-    rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.07));
-  }
+hr.style-two {
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.07), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.07));
+}
 
-  .samplebg {
-    border-radius: 5px;
-    background-color: whitesmoke;
-  }
+.samplebg {
+  border-radius: 5px;
+  background-color: whitesmoke;
+}
 
-  .sample {
-    text-align: left;
-    padding: 10px 0px 10px 10px;
-  }
+.sample {
+  text-align: left;
+  padding: 10px 0px 10px 10px;
+}
 
-  .posinfo {
-    text-align: center;
-  }
+.posinfo {
+  text-align: center;
+}
 
-  .neginfo {
-    text-align: center;
-    width: 300px;
-    background-color: rgb(238, 238, 238);
-  }
-  .ui.inverted.segment {
-      border-radius: 0px
-  }
+.neginfo {
+  text-align: center;
+  width: 300px;
+  background-color: rgb(238, 238, 238);
+}
+
+.ui.inverted.segment {
+  border-radius: 0px
+}
