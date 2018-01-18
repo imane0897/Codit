@@ -5,8 +5,11 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
+	"html/template"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"time"
 )
 
@@ -53,7 +56,9 @@ func login(w http.ResponseWriter, r *http.Request) {
 		dbSessions[c.Value] = session{un, time.Now()}
 
 		// redirect
-		http.Redirect(w, r, "/catalogue.html", http.StatusSeeOther)
+		cwd, _ := os.Getwd()
+		tmpl := template.Must(template.ParseFiles(filepath.Join(cwd, "../../html/catalogue.html")))
+		tmpl.Execute(w, user)
 		return
 	}
 	http.Redirect(w, r, "/login.html", http.StatusSeeOther)

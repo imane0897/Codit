@@ -4,6 +4,8 @@ import (
 	_ "github.com/lib/pq"
 	"html/template"
 	"net/http"
+	"os"
+	"path/filepath"
 	"time"
 )
 
@@ -73,6 +75,7 @@ func showStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tmpl := template.Must(template.ParseFiles("status.html"))
+	cwd, _ := os.Getwd()
+	tmpl := template.Must(template.ParseFiles(filepath.Join(cwd, "../../html/status.html")))
 	tmpl.Execute(w, subs)
 }

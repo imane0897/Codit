@@ -5,8 +5,11 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
+	"html/template"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"time"
 )
 
@@ -50,7 +53,7 @@ func signup(w http.ResponseWriter, r *http.Request) {
 		http.SetCookie(w, c)
 		dbSessions[c.Value] = session{un, time.Now()}
 
-		// tore user in dbUsers
+		// store user in dbUsers
 		bs, err := bcrypt.GenerateFromPassword([]byte(p), bcrypt.MinCost)
 		if err != nil {
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
@@ -63,7 +66,10 @@ func signup(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// redirect
-		http.Redirect(w, r, "/catalogue.html", http.StatusSeeOther)
+		user.ID = un
+		cwd, _ := os.Getwd()
+		tmpl := template.Must(template.ParseFiles(filepath.Join(cwd, "../../html/catalogue.html")))
+		tmpl.Execute(w, user)
 		return
 	}
 
