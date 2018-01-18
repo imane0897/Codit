@@ -32,13 +32,16 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/table.css">
 
 
-  <link rel="stylesheet" href="assets/library/codeinput.css">
   <link rel="stylesheet" href="assets/library/pages.css">
+  <link rel="stylesheet" href="assets/codemirror/lib/codemirror.css">
+  <link rel="stylesheet" href="assets/codemirror/theme/solarized.css">
 
   <script src="assets/library/jquery.min.js"></script>
   <script src="semantic/dist/components/tab.js"></script>
   <script src="semantic/dist/components/dropdown.js"></script>
   <script src="semantic/dist/components/transition.js"></script>
+  <script src="assets/codemirror/lib/codemirror.js"></script>
+  <script src="assets/codemirror/mode/cmake/cmake.js"></script>
 
   <script>
     $(document)
@@ -64,6 +67,16 @@
 
         $('.ui.dropdown')
           .dropdown();
+        
+        var lan = document.getElementById("language")
+        if (lan == 'c') console.log('the compiler is c')
+
+        var myCodeMirror = CodeMirror(document.getElementById("editor"), {
+          mode: "cmake",
+          theme: "solarized",
+          lineNumbers: true,
+          value: "#include <stdio.h> \nint main(void) {\n\tprintf(\"Hello World!\\n\");\n\treturn 0;\n}"
+        });
       });
 
   </script>
@@ -74,7 +87,8 @@
   <!-- Page Contents -->
   <div class="ui inverted segment">
     <div class="ui inverted menu">
-      <div class="coditheader">Co<span class="d">d</span>it</div>
+      <div class="coditheader">Co
+        <span class="d">d</span>it</div>
       <a class="item" href="catalogue.html">Problems</a>
       <a class="item" href="status.html">Status</a>
       <a class="item">Contest</a>
@@ -115,18 +129,13 @@
               <br>7</p>
           </div>
           <br>
-          <div class="ui dropdown compiler">
+          <div class="ui dropdown compiler" id="language">
             <div class="text">C++</div>
             <i class="dropdown icon"></i>
           </div>
           <br>
           <br>
-          <div class="ui container">
-            <div class="ui input focus">
-              <textarea class="codeinput" placeholder="Put your code here ..."></textarea>
-            </div>
-            <br>
-          </div>
+          <div id="editor"></div>
           <br>
           <div class="ui container">
             <div class="right item">
