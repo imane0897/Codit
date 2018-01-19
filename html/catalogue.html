@@ -30,7 +30,7 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/table.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/label.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/input.css">
-  
+
   <link rel="stylesheet" type="text/css" href="assets/library/pages.css">
 
 
@@ -47,6 +47,15 @@
         $('.ui.dropdown')
           .dropdown();
         $('table').tablesort();
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/userinfo', true);
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            document.getElementById('username').insertAdjacentHTML('beforeend', xhr.responseText);
+          }
+        };
+        xhr.send();
       });
 
   </script>
@@ -56,14 +65,15 @@
   <!-- Page Contents -->
   <div class="ui inverted segment">
     <div class="ui inverted menu">
-      <div class="coditheader">Co<span class="d">d</span>it</div>
+      <div class="coditheader">Co
+        <span class="d">d</span>it</div>
       <a class="item">Problems</a>
       <a class="item" href="status.html">Status</a>
       <a class="item">Contest</a>
       <a class="item">Discuss</a>
       <div class="right item">
         <div class="ui dropdown">
-          <div class="text">username</div>
+          <div class="text" id="username"></div>
           <i class="dropdown icon"></i>
           <div class="menu">
             <div class="item">
@@ -71,7 +81,7 @@
               Profile
             </div>
             <div class="item">
-              <i class="external icon" ></i>
+              <i class="external icon"></i>
               <a href="log-out" style="color:black">Log out</a>
             </div>
           </div>

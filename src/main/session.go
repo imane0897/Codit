@@ -8,11 +8,6 @@ import (
 	"log"
 )
 
-type session struct {
-	un           string
-	lastActivity time.Time
-}
-
 func getUser(w http.ResponseWriter, r *http.Request) Member {
 	// get cookie
 	c, err := r.Cookie("session")
@@ -32,9 +27,9 @@ func getUser(w http.ResponseWriter, r *http.Request) Member {
 	var s Session
 	var mem Member
 	row := db.QueryRow("SELECT * FROM sessions WHERE uuid = $1", c.Value)
-	err = row.Scan(&s.uuid, &s.username)
+	err = row.Scan(&s.uuid, &s.username, &s.lastActivity)
 	if err != sql.ErrNoRows {
-		_, err = db.Exec("UPDATE sessions SET last-activity = $1 where uuid = $2", time.Now(), s.uuid)
+		_, err = db.Exec("UPDATE sessions SET last_activity = $1 where uuid = $2", time.Now(), s.uuid)
 		if err != nil {
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 		}

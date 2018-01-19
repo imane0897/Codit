@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"database/sql"
 	_ "github.com/lib/pq"
 	"github.com/satori/go.uuid"
@@ -12,10 +13,13 @@ import (
 
 func main() {
 	http.Handle("/", http.FileServer(http.Dir("../../html")))
+	
 	http.HandleFunc("/sign-up", signup)
 	http.HandleFunc("/log-in", login)
 	http.HandleFunc("/log-out", logout)
 	http.HandleFunc("/status.html", showStatus)
+	http.HandleFunc("/userinfo", userinfo)
+
 	http.ListenAndServe(":9090", nil)
 }
 
@@ -117,7 +121,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 		// redirect
 		tmpl.ExecuteTemplate(w, "catalogue.html", user)
-		log.Println(user.ID + "logged in successfully")
+		log.Println(user.ID + " logged in successfully")
 		return
 	}
 	http.Redirect(w, r, "/login.html", http.StatusSeeOther)
@@ -147,4 +151,11 @@ func logout(w http.ResponseWriter, r *http.Request) {
 
 	http.Redirect(w, r, "/log-in", http.StatusSeeOther)
 	log.Println("logged out" + c.Value)
+}
+
+func userinfo(w http.ResponseWriter, r *http.Request) {
+	log.Println("turned into userinfo func")
+	mem := getUser(w, r)
+	log.Println(mem.ID)
+	fmt.Fprintln(w, mem.ID)
 }
