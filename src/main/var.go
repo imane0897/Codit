@@ -5,8 +5,6 @@ import (
 	_ "github.com/lib/pq"
 	"html/template"
 	"log"
-	// "os"
-	// "path/filepath"
 	"time"
 )
 
@@ -16,7 +14,7 @@ var tmpl *template.Template
 // Member has the information to interact with DATABASE codit TABLE members
 // id in 3-10 char, pwd in 6-10 char.
 // -----PostgreSQL-----
-// id   |   varchar(10)
+// id   |   varchar(30)
 // pwd  |   bytea
 type Member struct {
 	ID       string
@@ -70,8 +68,6 @@ type Session struct {
 }
 
 func init() {
-	// cwd, _ := os.Getwd()
-	// log.Println(cwd)
 	tmpl = template.Must(template.ParseGlob("../../html/*.html"))
 
 	// open database

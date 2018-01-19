@@ -18,7 +18,9 @@ func main() {
 	http.HandleFunc("/log-in", login)
 	http.HandleFunc("/log-out", logout)
 	http.HandleFunc("/status.html", showStatus)
+	
 	http.HandleFunc("/userinfo", userinfo)
+	http.HandleFunc("/submit", submit)
 
 	http.ListenAndServe(":9090", nil)
 }
@@ -154,8 +156,19 @@ func logout(w http.ResponseWriter, r *http.Request) {
 }
 
 func userinfo(w http.ResponseWriter, r *http.Request) {
-	log.Println("turned into userinfo func")
 	mem := getUser(w, r)
-	log.Println(mem.ID)
 	fmt.Fprintln(w, mem.ID)
+}
+
+func submit(w http.ResponseWriter, r *http.Request) {
+	mem := getUser(w, r)
+	log.Println("turned into submit func")
+	_, err := db.Exec("INSERT INTO submissions (username, problem, result, run_time, memory, submit_time, language) VALUES ($1, $2, $3, $4, $5, $6, $7)", 
+	mem.ID, 1000, 0, 266, 728, time.Now(), 0)
+	// result, run_time, memory, submit_time, language
+	if err != nil {
+		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, "/status.html", http.StatusSeeOther)
 }
