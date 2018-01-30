@@ -46,7 +46,7 @@
   <script>
     $(document)
       .ready(function () {
-        var myCodeMirror = CodeMirror(document.getElementById("editor"), {
+        var myCodeMirror = CodeMirror.fromTextArea(document.getElementById("editor"), {
           mode: "cmake",
           theme: "solarized",
           lineNumbers: true,
@@ -123,31 +123,23 @@
               <br>7</p>
           </div>
           <br>
-          <div class="ui selection dropdown">
-
-            <i class="dropdown icon"></i>
-            <div class="default text">Select &nbsp;Compiler</div>
-            <div class="menu">
-              <div class="item" data-value="c">C
-                <span class="description">GCC</span>
-              </div>
-              <div class="item" data-value="c++">C++
-                <span class="description">GCC</span>
-              </div>
-              <div class="item" data-value="java">Java
-                <span class="description">OpenJDK</span>
+          <form method="post" action="/submit">
+            <select class="ui selection dropdown" name="compiler">
+              <option value="">Select Compiler</option>
+              <option value="c">C</option>
+              <option value="c++">C++</option>
+              <option value="java">Java</option>
+            </select>
+            <br>
+            <br>
+            <textarea id="editor" name="code"></textarea>
+            <br>
+            <div class="ui container">
+              <div class="right item">
+                <input type="submit" value="Submit" class="ui secondary small button" />
               </div>
             </div>
-          </div>
-          <br>
-          <br>
-          <div id="editor"></div>
-          <br>
-          <div class="ui container">
-            <div class="right item">
-              <a class="ui secondary small button" href="/submit">Submit</a>
-            </div>
-          </div>
+          </form>
         </div>
         <div class="ui grid">
           <div class="right floated three wide column">

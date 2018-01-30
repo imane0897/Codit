@@ -8,21 +8,35 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
 func main() {
-	http.Handle("/", http.FileServer(http.Dir("../../html")))
+	http.HandleFunc("/", home)
 
 	http.HandleFunc("/sign-up", signup)
 	http.HandleFunc("/log-in", login)
 	http.HandleFunc("/log-out", logout)
 	http.HandleFunc("/status.html", showStatus)
-
 	http.HandleFunc("/userinfo", userinfo)
 	http.HandleFunc("/submit", submit)
 
 	http.ListenAndServe(":9090", nil)
+}
+
+func home(w http.ResponseWriter, r *http.Request) {
+	log.Println("turned into home func")
+	http.FileServer(http.Dir("../../html"))
+	tmpl.ExecuteTemplate(w, "index.html", nil)
+	// if r.URL.Path != "/" {
+	// 	w.WriteHeader(404)
+    //     w.Write([]byte("<h1>404</h1>"))
+	// } else {
+	// 	// http.Handle("/", http.FileServer(http.Dir("../../html")))
+	// 	// tmpl.ExecuteTemplate(w, "index.html", nil)
+	// 	http.FileServer(http.Dir("../../html"))
+    // }
 }
 
 func signup(w http.ResponseWriter, r *http.Request) {
@@ -122,6 +136,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// redirect
+		http.Redirect(w, r, "/catalogue", http.StatusSeeOther)
 		tmpl.ExecuteTemplate(w, "catalogue.html", user)
 		log.Println(user.ID + " logged in successfully")
 		return
@@ -162,20 +177,23 @@ func userinfo(w http.ResponseWriter, r *http.Request) {
 
 func submit(w http.ResponseWriter, r *http.Request) {
 	mem := getUser(w, r)
-	log.Println("turned into submit func")
-	_, err := db.Exec("INSERT INTO submissions (username, problem, result, run_time, memory, submit_time, language) VALUES ($1, $2, $3, $4, $5, $6, $7)",
-		mem.ID, 1000, 1, 17, 488, time.Now(), 0)
-	// result, run_time, memory, submit_time, language
+	log.Println("turned into submit func", mem.ID)
+	log.Println(r.FormValue("compiler"))
+
+	f, err := os.Create("judge/1000/c/main.c")
 	if err != nil {
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+		log.Println(err)
 		return
 	}
+	defer f.Close()
+	_, err = f.WriteString(r.FormValue("code"))
+	if err != nil {
+		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+		log.Println(err)
+		return
+	}
+	f.Sync()
+
 	http.Redirect(w, r, "/status.html", http.StatusSeeOther)
-	
-	time.Sleep(3 * time.Second)
-	_, err = db.Exec("UPDATE submissions SET result = 1 WHERE username = $1", mem.ID)
-	if err != nil {
-		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
-		return
-	}
 }
