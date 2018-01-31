@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	_ "github.com/lib/pq"
 	"html/template"
-	"log"
 	"time"
 )
 
@@ -65,20 +64,4 @@ type Session struct {
 	uuid         string
 	username     string
 	lastActivity time.Time
-}
-
-func init() {
-	tmpl = template.Must(template.ParseGlob("../../html/*.html"))
-
-	// open database
-	var err error
-	db, err = sql.Open("postgres", "postgres://root:password@localhost/codit?sslmode=disable")
-	if err != nil {
-		panic(err)
-	}
-
-	if err = db.Ping(); err != nil {
-		panic(err)
-	}
-	log.Println("Connected to database codit")
 }

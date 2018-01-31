@@ -2,14 +2,11 @@ package main
 
 import (
 	_ "github.com/lib/pq"
-	"html/template"
 	"net/http"
-	"os"
-	"path/filepath"
 	"time"
 )
 
-func showStatus(w http.ResponseWriter, r *http.Request) {
+func showStatusHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
 		return
@@ -75,7 +72,5 @@ func showStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cwd, _ := os.Getwd()
-	tmpl := template.Must(template.ParseFiles(filepath.Join(cwd, "../../html/status.html")))
-	tmpl.Execute(w, subs)
+	tmpl.ExecuteTemplate(w, "status.html", subs)
 }

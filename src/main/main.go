@@ -6,42 +6,55 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
 	"time"
 )
 
-func main() {
-	http.HandleFunc("/", home)
+func init() {
+	tmpl = template.Must(template.ParseGlob("../../html/*.html"))
 
-	http.HandleFunc("/sign-up", signup)
-	http.HandleFunc("/log-in", login)
-	http.HandleFunc("/log-out", logout)
-	http.HandleFunc("/status.html", showStatus)
-	http.HandleFunc("/userinfo", userinfo)
-	http.HandleFunc("/submit", submit)
+	// connect to database
+	var err error
+	db, err = sql.Open("postgres", "postgres://root:password@localhost/codit?sslmode=disable")
+	if err != nil {
+		log.Println("database open error: ", err)
+	}
+
+	if err = db.Ping(); err != nil {
+		log.Println("database connect error: ", err)
+	}
+	log.Println("Connected to the database")
+}
+
+func main() {
+	http.Handle("/", http.FileServer(http.Dir("../../html/")))
+
+	http.HandleFunc("/signup", signupHandler)
+	http.HandleFunc("/login", loginHandler)
+	http.HandleFunc("/logout", logoutHandler)
+	http.HandleFunc("/catalogue", catalogueHandler)
+	http.HandleFunc("/status", showStatusHandler)
+	http.HandleFunc("/userinfo", userInfoHandler)
+	http.HandleFunc("/submit", submitHandler)
 
 	http.ListenAndServe(":9090", nil)
 }
 
-func home(w http.ResponseWriter, r *http.Request) {
-	log.Println("turned into home func")
-	http.FileServer(http.Dir("../../html"))
-	tmpl.ExecuteTemplate(w, "index.html", nil)
-	// if r.URL.Path != "/" {
-	// 	w.WriteHeader(404)
-    //     w.Write([]byte("<h1>404</h1>"))
-	// } else {
-	// 	// http.Handle("/", http.FileServer(http.Dir("../../html")))
-	// 	// tmpl.ExecuteTemplate(w, "index.html", nil)
-	// 	http.FileServer(http.Dir("../../html"))
-    // }
+func homeHandler(w http.ResponseWriter, r *http.Request) {
+	mem := getUser(w, r)
+	if mem.ID == "" {
+		tmpl.ExecuteTemplate(w, "index.html", nil)
+	} else {
+		tmpl.ExecuteTemplate(w, "catalogue.html", nil)
+	}
 }
 
-func signup(w http.ResponseWriter, r *http.Request) {
+func signupHandler(w http.ResponseWriter, r *http.Request) {
 	if alreadyLoggedIn(w, r) {
-		http.Redirect(w, r, "/catalogue.html", http.StatusSeeOther)
+		tmpl.ExecuteTemplate(w, "catalogue.html", nil)
 		return
 	}
 
@@ -87,17 +100,16 @@ func signup(w http.ResponseWriter, r *http.Request) {
 
 		// redirect
 		user.ID = un
-		tmpl.ExecuteTemplate(w, "catalogue.html", user)
+		http.Redirect(w, r, "/catalogue", http.StatusSeeOther)
 		log.Println(user.ID + "signed up successfully")
 		return
 	}
-
-	http.Redirect(w, r, "/signup.html", http.StatusSeeOther)
+	tmpl.ExecuteTemplate(w, "signup.html", nil)
 }
 
-func login(w http.ResponseWriter, r *http.Request) {
+func loginHandler(w http.ResponseWriter, r *http.Request) {
 	if alreadyLoggedIn(w, r) {
-		http.Redirect(w, r, "/catalogue.html", http.StatusSeeOther)
+		tmpl.ExecuteTemplate(w, "catalogue.html", nil)
 		return
 	}
 
@@ -137,14 +149,13 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 		// redirect
 		http.Redirect(w, r, "/catalogue", http.StatusSeeOther)
-		tmpl.ExecuteTemplate(w, "catalogue.html", user)
 		log.Println(user.ID + " logged in successfully")
 		return
 	}
-	http.Redirect(w, r, "/login.html", http.StatusSeeOther)
+	tmpl.ExecuteTemplate(w, "login.html", nil)
 }
 
-func logout(w http.ResponseWriter, r *http.Request) {
+func logoutHandler(w http.ResponseWriter, r *http.Request) {
 	if !alreadyLoggedIn(w, r) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
@@ -166,17 +177,22 @@ func logout(w http.ResponseWriter, r *http.Request) {
 	}
 	http.SetCookie(w, c)
 
-	http.Redirect(w, r, "/log-in", http.StatusSeeOther)
+	http.Redirect(w, r, "/login", http.StatusSeeOther)
 	log.Println("logged out" + c.Value)
 }
 
-func userinfo(w http.ResponseWriter, r *http.Request) {
+func catalogueHandler(w http.ResponseWriter, r *http.Request) {
+	tmpl.ExecuteTemplate(w, "catalogue.html", nil)
+}
+
+func userInfoHandler(w http.ResponseWriter, r *http.Request) {
 	mem := getUser(w, r)
 	fmt.Fprintln(w, mem.ID)
 }
 
-func submit(w http.ResponseWriter, r *http.Request) {
+func submitHandler(w http.ResponseWriter, r *http.Request) {
 	mem := getUser(w, r)
+	// LOG
 	log.Println("turned into submit func", mem.ID)
 	log.Println(r.FormValue("compiler"))
 
@@ -195,5 +211,5 @@ func submit(w http.ResponseWriter, r *http.Request) {
 	}
 	f.Sync()
 
-	http.Redirect(w, r, "/status.html", http.StatusSeeOther)
+	http.Redirect(w, r, "/status", http.StatusSeeOther)
 }
