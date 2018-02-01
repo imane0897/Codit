@@ -14,7 +14,7 @@ import (
 )
 
 func init() {
-	tmpl = template.Must(template.ParseGlob("../../html/*.html"))
+	tmpl = template.Must(template.ParseGlob("../../view/*.html"))
 
 	// connect to database
 	var err error
@@ -30,7 +30,7 @@ func init() {
 }
 
 func main() {
-	http.Handle("/", http.FileServer(http.Dir("../../html/")))
+	http.Handle("/", http.FileServer(http.Dir("../../view/")))
 
 	http.HandleFunc("/signup", signupHandler)
 	http.HandleFunc("/login", loginHandler)
