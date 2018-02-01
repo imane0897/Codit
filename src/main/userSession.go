@@ -52,7 +52,7 @@ func alreadyLoggedIn(w http.ResponseWriter, r *http.Request) bool {
 	if err != sql.ErrNoRows {
 		row = db.QueryRow("SELECT * FROM members WHERE id = $1", s.username)
 		if row != nil {
-			log.Println("already logged in")
+			log.Println(s.username, "already logged in")
 			return true
 		}
 	}

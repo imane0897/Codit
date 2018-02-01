@@ -65,3 +65,32 @@ type Session struct {
 	username     string
 	lastActivity time.Time
 }
+
+// Problem has the informaion of each problems
+// ---------PostgreSQL---------
+// pid           |      int
+// title         |      text
+// description   |      text
+// input         |      text
+// output        |      text
+// sample_input  |      text
+// sample_output |      text
+type Problem struct {
+	Pid          int
+	Title        string
+	Description  string
+	Input        string
+	Output       string
+	SampleInput  template.HTML
+	SampleOutput template.HTML
+	Level        int
+}
+
+// ProblemInfo has the info for table in catalogue.html 
+type ProblemInfo struct {
+	Pid        int
+	Title      string
+	Acceptance string
+	Level      int
+	State      bool
+}

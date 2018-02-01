@@ -83,8 +83,8 @@
   <div class="ui inverted segment">
     <div class="ui inverted menu">
       <div class="coditheader">Co<span class="d">d</span>it</div>
-      <a class="item" href="catalogue.html">Problems</a>
-      <a class="item" href="status.html">Status</a>
+      <a class="item" href="catalogue">Problems</a>
+      <a class="item" href="status">Status</a>
       <a class="item">Contest</a>
       <a class="item">Discuss</a>
     </div>
@@ -92,7 +92,7 @@
   <br>
 
   <div class="ui container">
-    <h2 class>1000. A + B problem</h2>
+    <h2 class>{{.Pid}}. {{.Title}}</h2>
   </div>
   <br>
 
@@ -107,20 +107,18 @@
       <div class="ui stackable grid">
         <div class="twelve wide column">
           <h3>Description</h3>
-          <p>Calculate A + B.</p>
+          <p>{{.Description}}</p>
           <h3>Input</h3>
-          <p>Input contains multiple test cases. Each test case contains two integers A and B.</p>
+          <p>{{.Input}}</p>
           <h3>Output</h3>
-          <p>For each test case output the sum A + B in one line.</p>
+          <p>{{.Output}}</p>
           <h3>Sample Input</h3>
           <div class="samplebg">
-            <p class="sample">1&emsp;2
-              <br>3&emsp;4</p>
+            <p class="sample">{{.SampleInput}}</p>
           </div>
           <h3>Sample Output</h3>
           <div class="samplebg">
-            <p class="sample">3
-              <br>7</p>
+            <p class="sample">{{.SampleOutput}}</p>
           </div>
           <br>
           <form method="post" action="/submit">
@@ -168,6 +166,7 @@
 
 
   <div style="margin-top:100px"></div>
+
 
   <!-- footer -->
   <div class="ui inverted vertical footer">
