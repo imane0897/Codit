@@ -20,8 +20,7 @@ type Member struct {
 	Password []byte
 }
 
-// Submission has the information to interact with DATABASE codit TABLE submissions
-// NOTE that data type of submitTime in db is timestamp or say time.Time in Golang
+// Submission has the info for table display in status.html
 // --------------PostgreSQL-----------------
 // rid         | serial8
 // username    | varchar(10)
@@ -31,28 +30,40 @@ type Member struct {
 // memory      | int
 // submit_time | timestamp without time zone
 // language    | int
+// -----------------------------------------
+// Result0		Pending
+// Result1		Accept
+// Result2		Wrong Answer
+// Result3		Compile Error
+// Result4		Runtime Error
+// Result5		Time Limit Exceeded
+// Result6		Memory Limit Exceeded
+// Result7		Output Limit Exceeded
+// Result8		Presentation Error
+// Result9		System Error
+// Language0	C
+// Language1	C++
+// Language2	Java
 type Submission struct {
 	RID        int
 	Username   string
 	Problem    int
-	Result     int
-	RunTime    int
-	Memory     int
-	SubmitTime time.Time
-	Language   int
-}
-
-// ShowSubmission has the same struct of Submission but changed datatype of SubmitTime
-// and Language for template show use
-type ShowSubmission struct {
-	RID        int
-	Username   string
-	Problem    int
-	Result     string
+	Result0    bool
+	Result1    bool
+	Result2    bool
+	Result3    bool
+	Result4    bool
+	Result5    bool
+	Result6    bool
+	Result7    bool
+	Result8    bool
+	Result9    bool
 	RunTime    int
 	Memory     int
 	SubmitTime string
-	Language   string
+	Language0  bool
+	Language1  bool
+	Language2  bool
 }
 
 // Session has uuid of cookie and username to record its owner
@@ -86,11 +97,15 @@ type Problem struct {
 	Level        int
 }
 
-// ProblemInfo has the info for table in catalogue.html 
+// ProblemInfo has the info for table in catalogue.html
 type ProblemInfo struct {
 	Pid        int
 	Title      string
 	Acceptance string
-	Level      int
+	Level0     bool
+	Level1     bool
+	Level2     bool
+	Level3     bool
+	Level4     bool
 	State      bool
 }

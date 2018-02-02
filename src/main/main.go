@@ -31,7 +31,7 @@ func main() {
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/logout", logoutHandler)
 	http.HandleFunc("/catalogue", catalogueHandler)
-	http.HandleFunc("/status", showStatusHandler)
+	http.HandleFunc("/status", statusHandler)
 	http.HandleFunc("/userinfo", userInfoHandler)
 	http.HandleFunc("/submit", submitHandler)
 	http.HandleFunc("/problem", problemHandler)

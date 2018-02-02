@@ -123,7 +123,17 @@
           </td>
           <td>{{.Acceptance}}</td>
           <td>
-            <div class="ui green circular label">Lev. {{.Level}}</div>
+            {{if .Level0}}
+            <div class="ui green circular label">Lev. 0</div>
+            {{else if .Level1}}
+            <div class="ui olive circular label">Lev. 1</div>
+            {{else if .Level2}}
+            <div class="ui yellow circular label">Lev. 2</div>
+            {{else if .Level3}}
+            <div class="ui orange circular label">Lev. 3</div>
+            {{else if .Level4}}
+            <div class="ui red circular label">Lev. 0</div>
+            {{end}}
           </td>
           <td>
             {{if .State}}

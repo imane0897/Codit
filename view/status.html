@@ -79,8 +79,34 @@
           <th>{{.RID}}</th>
           <th>{{.Username}}</th>
           <th>{{.Problem}}</th>
-          <th>{{.Language}}</th>
-          <th>{{.Result}}</th>
+          {{if .Language0}}
+          <th>C</th>
+          {{else if .Language1}}
+          <th>C++</th>
+          {{else if .Language2}}
+          <th>Java</th>
+          {{end}}
+          {{if .Result0}}
+          <th style="color:blue">Pending</th>
+          {{else if .Result1}}
+          <th style="color:red">Accept</th>
+          {{else if .Result2}}
+          <th style="color:green">Wrong Answer</th>
+          {{else if .Result3}}
+          <th style="color:green">Compile Error</th>
+          {{else if .Result4}}
+          <th style="color:green">Runtime Error</th>
+          {{else if .Result5}}
+          <th style="color:green">Time Limit Exceeded</th>
+          {{else if .Result6}}
+          <th style="color:green">Memory Limit Exceeded</th>
+          {{else if .Result7}}
+          <th style="color:green">Output Limit Exceeded</th>
+          {{else if .Result8}}
+          <th style="color:yellow">Presentation Error</th>
+          {{else if .Result9}}
+          <th style="color:blue">System Error</th>
+          {{end}}
           <th>{{.RunTime}}ms</th>
           <th>{{.Memory}}KB</th>
           <th>{{.SubmitTime}}</th>

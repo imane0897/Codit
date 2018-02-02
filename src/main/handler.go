@@ -174,12 +174,25 @@ func catalogueHandler(w http.ResponseWriter, r *http.Request) {
 		pbinfo := ProblemInfo{}
 
 		// check Pid, Title, Level
+		var level int
 		err := rows.Scan(&pbinfo.Pid, &pbinfo.Title, &pb.Description, &pb.Input, &pb.Output,
-			&pb.SampleInput, &pb.SampleOutput, &pbinfo.Level)
+			&pb.SampleInput, &pb.SampleOutput, &level)
 		if err != nil {
 			http.Error(w, http.StatusText(500), 500)
 			log.Println("query problem catalogue in SQL error")
 			return
+		}
+		switch level {
+		case 0:
+			pbinfo.Level0 = true
+		case 1:
+			pbinfo.Level1 = true
+		case 2:
+			pbinfo.Level2 = true
+		case 3:
+			pbinfo.Level3 = true
+		case 4:
+			pbinfo.Level4 = true
 		}
 
 		// caculate and convert Acceptance to string for display
@@ -278,4 +291,73 @@ func submitHandler(w http.ResponseWriter, r *http.Request) {
 	f.Sync()
 
 	http.Redirect(w, r, "/status", http.StatusSeeOther)
+}
+
+func statusHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
+		return
+	}
+
+	rows, err := db.Query("SELECT * FROM submissions ORDER BY rid DESC LIMIT 20")
+	if err != nil {
+		http.Error(w, http.StatusText(500), 500)
+		return
+	}
+	defer rows.Close()
+
+	subs := make([]Submission, 0)
+	for rows.Next() {
+		sub := Submission{}
+		var st time.Time
+		var lan int
+		var res int
+
+		err := rows.Scan(&sub.RID, &sub.Username, &sub.Problem, &res, &sub.RunTime, &sub.Memory, &st, &lan)
+		if err != nil {
+			http.Error(w, http.StatusText(500), 500)
+			return
+		}
+
+		sub.SubmitTime = st.Format(time.RFC3339)
+		switch lan {
+		case 0:
+			sub.Language0 = true
+		case 1:
+			sub.Language1 = true
+		case 2:
+			sub.Language2 = true
+		}
+		switch res {
+		case 0:
+			sub.Result0 = true
+		case 1:
+			sub.Result1 = true
+		case 2:
+			sub.Result2 = true
+		case 3:
+			sub.Result3 = true
+		case 4:
+			sub.Result4 = true
+		case 5:
+			sub.Result5 = true
+		case 6:
+			sub.Result6 = true
+		case 7:
+			sub.Result7 = true
+		case 8:
+			sub.Result8 = true
+		case 9:
+			sub.Result9 = true
+		}
+
+		subs = append(subs, sub)
+	}
+
+	if err = rows.Err(); err != nil {
+		http.Error(w, http.StatusText(500), 500)
+		return
+	}
+
+	tmpl.ExecuteTemplate(w, "status.html", subs)
 }
