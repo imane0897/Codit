@@ -11,25 +11,15 @@
   <title>Signup</title>
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/reset.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/site.css">
-
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/container.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/grid.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/header.css">
-  <link rel="stylesheet" type="text/css" href="semantic/dist/components/image.css">
-  <link rel="stylesheet" type="text/css" href="semantic/dist/components/menu.css">
-
-  <link rel="stylesheet" type="text/css" href="semantic/dist/components/divider.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/segment.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/button.css">
-  <link rel="stylesheet" type="text/css" href="semantic/dist/components/list.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/icon.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/form.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/input.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/message.css">
-
-  
-  <script src="assets/library/jquery.min.js"></script>
-  <script src="semantic/dist/components/form.js"></script>
 
   <style type="text/css">
     body {
@@ -49,6 +39,58 @@
     }
 
   </style>
+  
+</head>
+
+<body>
+  <div class="ui middle aligned center aligned grid">
+    <div class="column">
+      <div>
+        <h2 class="ui header" , style="font-size:3.5em">Co<span style="color:#fbcf61;font-weight:bold">d</span>it</h2>
+      </div>
+      <h2 class="ui image header">
+        <div class="content">
+          Create a new account
+        </div>
+      </h2>
+      <form class="ui large form" method="post" action="/signup">
+        <div class="ui stacked segment">
+          <div class="field">
+            <div class="ui left icon input">
+              <i class="user icon"></i>
+              <input type="text" name="username" placeholder="Username">
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui left icon input">
+              <i class="lock icon"></i>
+              <input type="password" name="password" placeholder="Password">
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui left icon input">
+              <i class="lock icon"></i>
+              <input type="password" name="password2" placeholder="Confirm password">
+            </div>
+          </div>
+          <input type="submit" value="Sigup" class="ui fluid large yellow button" />
+        </div>
+
+        <div class="ui error message"></div>
+
+      </form>
+
+      <div class="ui message">
+        Already have an account&nbsp;?&nbsp;
+        <a href="login">Log in</a>
+      </div>
+    </div>
+  </div>
+</body>
+
+  <script src="assets/library/jquery.min.js"></script>
+  <script src="semantic/dist/components/form.js"></script>
+
   <script>
     $(document)
       .ready(function () {
@@ -104,52 +146,4 @@
       });
 
   </script>
-</head>
-
-<body>
-  <div class="ui middle aligned center aligned grid">
-    <div class="column">
-      <div>
-        <h2 class="ui header" , style="font-size:3.5em">Co<span style="color:#fbcf61;font-weight:bold">d</span>it</h2>
-      </div>
-      <h2 class="ui image header">
-        <div class="content">
-          Create a new account
-        </div>
-      </h2>
-      <form class="ui large form" method="post" action="/signup">
-        <div class="ui stacked segment">
-          <div class="field">
-            <div class="ui left icon input">
-              <i class="user icon"></i>
-              <input type="text" name="username" placeholder="Username">
-            </div>
-          </div>
-          <div class="field">
-            <div class="ui left icon input">
-              <i class="lock icon"></i>
-              <input type="password" name="password" placeholder="Password">
-            </div>
-          </div>
-          <div class="field">
-            <div class="ui left icon input">
-              <i class="lock icon"></i>
-              <input type="password" name="password2" placeholder="Confirm password">
-            </div>
-          </div>
-          <input type="submit" value="Sigup" class="ui fluid large yellow button" />
-        </div>
-
-        <div class="ui error message"></div>
-
-      </form>
-
-      <div class="ui message">
-        Already have an account&nbsp;?&nbsp;
-        <a href="login">Log in</a>
-      </div>
-    </div>
-  </div>
-</body>
-
 </html>

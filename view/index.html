@@ -11,64 +11,29 @@
   <title>Codit</title>
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/reset.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/site.css">
-
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/container.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/grid.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/header.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/image.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/menu.css">
-
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/divider.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/dropdown.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/segment.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/button.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/list.css">
-  <link rel="stylesheet" type="text/css" href="semantic/dist/components/icon.css">
-  <link rel="stylesheet" type="text/css" href="semantic/dist/components/sidebar.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/transition.css">
-
 
   <link rel="stylesheet" type="text/css" href="assets/library/main.css">
   <link rel="stylesheet" type="text/css" href="assets/library/pages.css">
   <link rel="stylesheet" type="text/css" href="assets/library/devices.css">
-
 
   <style type="text/css" media="screen, print">
     @font-face {
       font-family: "Raleway";
       src: url("assets/Raleway.ttf");
     }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    }
-
   </style>
 
-  <script src="assets/library/jquery.min.js"></script>
-  <script src="semantic/dist/components/visibility.js"></script>
-  <script src="semantic/dist/components/sidebar.js"></script>
-  <script src="semantic/dist/components/transition.js"></script>
-
-  <script>
-    $(document)
-      .ready(function () {
-
-        // fix menu when passed
-        $('.masthead')
-          .visibility({
-            once: false,
-            onBottomPassed: function () {
-              $('.fixed.menu').transition('fade in');
-            },
-            onBottomPassedReverse: function () {
-              $('.fixed.menu').transition('fade out');
-            }
-          });
-
-      });
-
-  </script>
 </head>
 
 <body>
@@ -193,7 +158,30 @@
         </div>
       </div>
     </div>
-
 </body>
 
+<script src="assets/library/jquery.min.js"></script>
+  <script src="semantic/dist/components/visibility.js"></script>
+  <script src="semantic/dist/components/sidebar.js"></script>
+  <script src="semantic/dist/components/transition.js"></script>
+
+  <script>
+    $(document)
+      .ready(function () {
+
+        // fix menu when passed
+        $('.masthead')
+          .visibility({
+            once: false,
+            onBottomPassed: function () {
+              $('.fixed.menu').transition('fade in');
+            },
+            onBottomPassedReverse: function () {
+              $('.fixed.menu').transition('fade out');
+            }
+          });
+
+      });
+
+  </script>
 </html>

@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <!-- Site Properties -->
-  <title>1000</title>
+  <title>{{.Title}} - Codit</title>
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/reset.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/site.css">
 
@@ -50,7 +50,7 @@
           mode: "cmake",
           theme: "solarized",
           lineNumbers: true,
-          value: "put your code here ..."
+          value: "put your code here"
         });
 
         $('.ui.selection.dropdown')
@@ -61,7 +61,7 @@
               if (lan == "c") {
                 myCodeMirror.getDoc().setValue(
                   "#include <stdio.h> \nint main(void) {\n\tprintf(\"Hello World!\\n\");\n\treturn 0;\n}");
-              } else if (lan == "c++") {
+              } else if (lan == "cpp") {
                 myCodeMirror.getDoc().setValue(
                   "#include <iostream>\nusing namespace std;\nint main() {\n\tcout << \"Hello World!\" << endl;\n\treturn 0;\n}"
                 );
@@ -125,7 +125,7 @@
             <select class="ui selection dropdown" name="compiler">
               <option value="">Select Compiler</option>
               <option value="c">C</option>
-              <option value="c++">C++</option>
+              <option value="cpp">C++</option>
               <option value="java">Java</option>
             </select>
             <br>

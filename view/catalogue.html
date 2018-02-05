@@ -11,53 +11,20 @@
   <title>Problems-Codit</title>
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/reset.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/site.css">
-
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/container.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/grid.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/header.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/image.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/menu.css">
-
-  <link rel="stylesheet" type="text/css" href="semantic/dist/components/divider.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/dropdown.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/segment.css">
-  <link rel="stylesheet" type="text/css" href="semantic/dist/components/list.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/icon.css">
-  <link rel="stylesheet" type="text/css" href="semantic/dist/components/sidebar.css">
-  <link rel="stylesheet" type="text/css" href="semantic/dist/components/transition.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/search.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/table.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/label.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/input.css">
 
   <link rel="stylesheet" type="text/css" href="assets/library/pages.css">
-
-
-  <script src="assets/library/jquery.min.js"></script>
-  <script src="semantic/dist/components/visibility.js"></script>
-  <script src="semantic/dist/components/sidebar.js"></script>
-  <script src="semantic/dist/components/transition.js"></script>
-  <script src="semantic/dist/components/dropdown.js"></script>
-  <script src="assets/library/tablesort.js"></script>
-
-  <script>
-    $(document)
-      .ready(function () {
-        $('.ui.dropdown')
-          .dropdown();
-        $('table').tablesort();
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', '/userinfo', true);
-        xhr.onreadystatechange = function () {
-          if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-            document.getElementById('username').insertAdjacentHTML('beforeend', xhr.responseText);
-          }
-        };
-        xhr.send();
-      });
-
-  </script>
 </head>
 
 <body>
@@ -176,4 +143,29 @@
   </div>
 </body>
 
+<script src="assets/library/jquery.min.js"></script>
+  <script src="semantic/dist/components/visibility.js"></script>
+  <script src="semantic/dist/components/sidebar.js"></script>
+  <script src="semantic/dist/components/transition.js"></script>
+  <script src="semantic/dist/components/dropdown.js"></script>
+  <script src="assets/library/tablesort.js"></script>
+
+  <script>
+    $(document)
+      .ready(function () {
+        $('.ui.dropdown')
+          .dropdown();
+        $('table').tablesort();
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/userinfo', true);
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            document.getElementById('username').insertAdjacentHTML('beforeend', xhr.responseText);
+          }
+        };
+        xhr.send();
+      });
+
+  </script>
 </html>

@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <!-- Site Properties -->
-  <title>Status List</title>
+  <title>{{.Title}} - Submission Details - Codit</title>
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/reset.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/site.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/container.css">
@@ -16,12 +16,18 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/header.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/image.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/menu.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/dropdown.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/segment.css">
-  <link rel="stylesheet" type="text/css" href="semantic/dist/components/transition.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/button.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/tab.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/input.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/dropdown.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/table.css">
 
-  <link rel="stylesheet" href="assets/library/pages.css">
 
+  <link rel="stylesheet" href="assets/library/pages.css">
+  <link rel="stylesheet" href="assets/codemirror/lib/codemirror.css">
+  <link rel="stylesheet" href="assets/codemirror/theme/solarized.css">
 </head>
 
 <body>
@@ -36,64 +42,12 @@
     </div>
   </div>
   <br>
-  <br>
-
+  
   <div class="ui container">
-    <table class="ui striped table" style="text-align:center">
-      <thead>
-        <tr>
-          <th class="sorted descending">RID</th>
-          <th>USER</th>
-          <th>PROBLEM</th>
-          <th>LANGUAGE</th>
-          <th>RESULT</th>
-          <th>TIME</th>
-          <th>MEMORY</th>
-          <th>SUBMIT TIME</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{range .}}
-        <tr>
-          <th>{{.RID}}</th>
-          <th>{{.Username}}</th>
-          <th>{{.Problem}}</th>
-          {{if .Language0}}
-          <th><a href="">C</a></th>
-          {{else if .Language1}}
-          <th><a href="">C++</a></th>
-          {{else if .Language2}}
-          <th><a href="">Java</a></th>
-          {{end}}
-          {{if .Result0}}
-          <th style="color:blue">Pending</th>
-          {{else if .Result1}}
-          <th style="color:red">Accept</th>
-          {{else if .Result2}}
-          <th style="color:green">Wrong Answer</th>
-          {{else if .Result3}}
-          <th style="color:green">Compile Error</th>
-          {{else if .Result4}}
-          <th style="color:green">Runtime Error</th>
-          {{else if .Result5}}
-          <th style="color:green">Time Limit Exceeded</th>
-          {{else if .Result6}}
-          <th style="color:green">Memory Limit Exceeded</th>
-          {{else if .Result7}}
-          <th style="color:green">Output Limit Exceeded</th>
-          {{else if .Result8}}
-          <th style="color:yellow">Presentation Error</th>
-          {{else if .Result9}}
-          <th style="color:blue">System Error</th>
-          {{end}}
-          <th>{{.RunTime}}ms</th>
-          <th>{{.Memory}}KB</th>
-          <th>{{.SubmitTime}}</th>
-        </tr>
-        {{end}}
-      </tbody>
-    </table>
+    <h3><a>{{.Title}}</a></h3>
+    <textarea id="editor">{{.Code}}</textarea>
   </div>
+
 
   <div style="margin-top:100px"></div>
 
@@ -124,14 +78,16 @@
   </div>
 </body>
 
-  <script src="assets/library/jquery.min.js"></script>
-  <script src="semantic/dist/components/visibility.js"></script>
-  <script src="semantic/dist/components/sidebar.js"></script>
-  <script src="semantic/dist/components/transition.js"></script>
-  <script src="assets/library/tablesort.js"></script>
-  
+<script src="assets/library/jquery.min.js"></script>
+  <script src="assets/codemirror/lib/codemirror.js"></script>
+
   <script>
     $(document)
-      .ready(function () {});
+      .ready(function () {
+        var myCodeMirror = CodeMirror.fromTextArea(document.getElementById("editor"), {
+          lineNumbers: true,
+          value: "put your code here ..."
+        });
+      });
   </script>
 </html>
