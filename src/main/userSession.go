@@ -15,6 +15,7 @@ func getUser(w http.ResponseWriter, r *http.Request) Member {
 		sID, err := uuid.NewV4()
 		if err != nil {
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			log.Println("func getUser error: cannot get cookie session")
 		}
 		c = &http.Cookie{
 			Name:  "session",
@@ -32,9 +33,14 @@ func getUser(w http.ResponseWriter, r *http.Request) Member {
 		_, err = db.Exec("UPDATE sessions SET last_activity = $1 where uuid = $2", time.Now(), s.uuid)
 		if err != nil {
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			log.Println("func getUser error: sql error")
 		}
 		row = db.QueryRow("SELECT * FROM members WHERE id = $1", s.username)
 		err = row.Scan(&mem.ID, &mem.Password)
+		if err != nil {
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			log.Println("func getUser error: cannot get user info")
+		}
 	}
 	return mem
 }

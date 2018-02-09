@@ -9,6 +9,7 @@ import (
 
 var db *sql.DB
 var tmpl *template.Template
+var rid uint64
 
 // Member has the information to interact with DATABASE codit TABLE members
 // id in 3-10 char, pwd in 6-10 char.

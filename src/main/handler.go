@@ -1,17 +1,20 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
+	"log"
+	"os"
+	"strconv"
+	"sync/atomic"
+	"time"
+
+	"database/sql"
 	_ "github.com/lib/pq"
+
 	"github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 	"html/template"
-	"log"
 	"net/http"
-	"os"
-	"strconv"
-	"time"
 )
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
@@ -155,7 +158,7 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func catalogueHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "GET" {
+	if r.Method != http.MethodGet {
 		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
 		return
 	}
@@ -179,7 +182,7 @@ func catalogueHandler(w http.ResponseWriter, r *http.Request) {
 			&pb.SampleInput, &pb.SampleOutput, &level)
 		if err != nil {
 			http.Error(w, http.StatusText(500), 500)
-			log.Println("query problem catalogue in SQL error")
+			log.Println("func catalogueHandler query problem catalogue in SQL error: ", err)
 			return
 		}
 		switch level {
@@ -201,13 +204,15 @@ func catalogueHandler(w http.ResponseWriter, r *http.Request) {
 		err = row.Scan(&ac)
 		if err != nil {
 			http.Error(w, http.StatusText(500), http.StatusInternalServerError)
-			log.Println("func catalogueHandler error: cannot query problems")
+			log.Println("func catalogueHandler cannot query problems: ", err)
+			return
 		}
 		row = db.QueryRow("SELECT count(*) FROM submissions WHERE problem = $1", pbinfo.Pid)
 		err = row.Scan(&total)
 		if err != nil {
 			http.Error(w, http.StatusText(500), http.StatusInternalServerError)
-			log.Println("func catalogueHandler error: scan problems error")
+			log.Println("func catalogueHandler scan problems error: ", err)
+			return
 		}
 		pbinfo.Acceptance = strconv.FormatFloat(ac/total*100, 'f', 2, 32)
 		if pbinfo.Acceptance != "NaN" {
@@ -238,7 +243,7 @@ func userInfoHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func problemHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "GET" {
+	if r.Method != http.MethodGet {
 		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
 		return
 	}
@@ -259,9 +264,11 @@ func problemHandler(w http.ResponseWriter, r *http.Request) {
 	case err == sql.ErrNoRows:
 		http.NotFound(w, r)
 		log.Println("func problemHandler error: problem ", pid, " not found")
+		return 
 	case err != nil:
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 		log.Println("func problemHandler error: problem ", pid, " query error")
+		return
 	}
 	pb.SampleInput = template.HTML(SampleInput)
 	pb.SampleOutput = template.HTML(SampleOutput)
@@ -271,21 +278,24 @@ func problemHandler(w http.ResponseWriter, r *http.Request) {
 
 func submitHandler(w http.ResponseWriter, r *http.Request) {
 	mem := getUser(w, r)
-	// LOG
-	log.Println("turned into submit func", mem.ID)
-	log.Println(r.FormValue("compiler"))
+	if mem.ID == "" {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
 
-	f, err := os.Create("judge/1000/c/main.c")
+	atomic.AddUint64(&rid, 1)
+	f, err := os.Create("../../filesystem/submissions/" + strconv.FormatUint(rid, 10) + "." + r.FormValue("compiler"))
 	if err != nil {
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
-		log.Println(err)
+		log.Println("func submitHandler create file error: ", err)
 		return
 	}
 	defer f.Close()
+
 	_, err = f.WriteString(r.FormValue("code"))
 	if err != nil {
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
-		log.Println(err)
+		log.Println("func submitHandle write file error: ", err)
 		return
 	}
 	f.Sync()
@@ -294,7 +304,7 @@ func submitHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func statusHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "GET" {
+	if r.Method != http.MethodGet {
 		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
 		return
 	}
@@ -360,4 +370,18 @@ func statusHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tmpl.ExecuteTemplate(w, "status.html", subs)
+}
+
+func codeHandler(w http.ResponseWriter, r *http.Request) {
+	// TODO:
+	if r.Method != http.MethodGet {
+		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
+		return
+	}
+
+	rid := r.FormValue("rid")
+	if rid == "" {
+		http.Error(w, http.StatusText(400), http.StatusBadRequest)
+		return
+	}
 }

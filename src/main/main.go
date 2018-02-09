@@ -9,6 +9,7 @@ import (
 )
 
 func init() {
+	// parse templates
 	tmpl = template.Must(template.ParseGlob("../../view/*.html"))
 
 	// connect to database
@@ -20,8 +21,16 @@ func init() {
 
 	if err = db.Ping(); err != nil {
 		log.Println("database connect error: ", err)
+	} else {
+		log.Println("Connected to the database")
 	}
-	log.Println("Connected to the database")
+
+	// init variables
+	row := db.QueryRow("SELECT rid FROM submissions LIMIT 1")
+	err = row.Scan(&rid)
+	if err != nil {
+		log.Println("cannot get last rid: ", err)
+	}
 }
 
 func main() {
@@ -35,6 +44,7 @@ func main() {
 	http.HandleFunc("/userinfo", userInfoHandler)
 	http.HandleFunc("/submit", submitHandler)
 	http.HandleFunc("/problem", problemHandler)
+	http.HandleFunc("/code", codeHandler)
 
 	http.ListenAndServe(":9090", nil)
 }
