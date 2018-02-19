@@ -1,20 +1,19 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
+	"html/template"
 	"log"
+	"net/http"
 	"os"
 	"strconv"
 	"sync/atomic"
 	"time"
 
-	"database/sql"
 	_ "github.com/lib/pq"
-
 	"github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
-	"html/template"
-	"net/http"
 )
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
@@ -166,7 +165,7 @@ func catalogueHandler(w http.ResponseWriter, r *http.Request) {
 	rows, err := db.Query("SELECT * FROM problems ORDER BY pid ASC")
 	if err != nil {
 		http.Error(w, http.StatusText(500), 500)
-		log.Println("cannot query problem catalogue in SQL")
+		log.Println("func catalogueHandler cannot query problem catalogue in SQL")
 		return
 	}
 	defer rows.Close()
@@ -264,7 +263,7 @@ func problemHandler(w http.ResponseWriter, r *http.Request) {
 	case err == sql.ErrNoRows:
 		http.NotFound(w, r)
 		log.Println("func problemHandler error: problem ", pid, " not found")
-		return 
+		return
 	case err != nil:
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 		log.Println("func problemHandler error: problem ", pid, " query error")

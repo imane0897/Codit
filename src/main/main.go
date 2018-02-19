@@ -2,18 +2,27 @@ package main
 
 import (
 	"database/sql"
-	_ "github.com/lib/pq"
 	"html/template"
 	"log"
 	"net/http"
+	"os"
+
+	_ "github.com/lib/pq"
 )
 
 func init() {
+	// write log to file
+	LogFile, err := os.OpenFile("../../filesystem/logfile", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Println("func init cannot open log file: ", err)
+	}
+	defer LogFile.Close()
+	log.SetOutput(LogFile)
+
 	// parse templates
 	tmpl = template.Must(template.ParseGlob("../../view/*.html"))
 
 	// connect to database
-	var err error
 	db, err = sql.Open("postgres", "postgres://root:password@localhost/codit?sslmode=disable")
 	if err != nil {
 		log.Println("database open error: ", err)
