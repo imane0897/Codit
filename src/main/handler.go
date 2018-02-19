@@ -282,6 +282,7 @@ func submitHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// write code to file
 	atomic.AddUint64(&rid, 1)
 	f, err := os.Create("../../filesystem/submissions/" + strconv.FormatUint(rid, 10) + "." + r.FormValue("compiler"))
 	if err != nil {
@@ -298,6 +299,18 @@ func submitHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	f.Sync()
+
+	// get file type 
+	var ftype int
+	switch r.FormValue("compiler") {
+	case "c":
+		ftype = 0
+	case "c++":
+		ftype = 1
+	}
+	// res, err := operateFile(rid, ftype, )
+	fmt.Println(ftype)
+	fmt.Println(r.FormValue("pid"))
 
 	http.Redirect(w, r, "/status", http.StatusSeeOther)
 }
