@@ -27,7 +27,7 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 
 func signupHandler(w http.ResponseWriter, r *http.Request) {
 	if alreadyLoggedIn(w, r) {
-		tmpl.ExecuteTemplate(w, "catalogue.html", nil)
+		http.Redirect(w, r, "/catalogue", http.StatusSeeOther)
 		return
 	}
 
@@ -83,7 +83,7 @@ func signupHandler(w http.ResponseWriter, r *http.Request) {
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
 	if alreadyLoggedIn(w, r) {
-		tmpl.ExecuteTemplate(w, "catalogue.html", nil)
+		http.Redirect(w, r, "/catalogue", http.StatusSeeOther)
 		return
 	}
 
@@ -123,8 +123,8 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// redirect
-		http.Redirect(w, r, "/catalogue", http.StatusSeeOther)
 		log.Println(user.ID + " logged in successfully")
+		http.Redirect(w, r, "/catalogue", http.StatusSeeOther)
 		return
 	}
 	tmpl.ExecuteTemplate(w, "login.html", nil)
@@ -165,7 +165,7 @@ func catalogueHandler(w http.ResponseWriter, r *http.Request) {
 	rows, err := db.Query("SELECT * FROM problems ORDER BY pid ASC")
 	if err != nil {
 		http.Error(w, http.StatusText(500), 500)
-		log.Println("func catalogueHandler cannot query problem catalogue in SQL")
+		log.Println("func catalogueHandler cannot query problem catalogue in SQL -", err)
 		return
 	}
 	defer rows.Close()
@@ -181,7 +181,7 @@ func catalogueHandler(w http.ResponseWriter, r *http.Request) {
 			&pb.SampleInput, &pb.SampleOutput, &level)
 		if err != nil {
 			http.Error(w, http.StatusText(500), 500)
-			log.Println("func catalogueHandler query problem catalogue in SQL error: ", err)
+			log.Println("func catalogueHandler query problem catalogue in SQL error -", err)
 			return
 		}
 		switch level {
@@ -203,14 +203,14 @@ func catalogueHandler(w http.ResponseWriter, r *http.Request) {
 		err = row.Scan(&ac)
 		if err != nil {
 			http.Error(w, http.StatusText(500), http.StatusInternalServerError)
-			log.Println("func catalogueHandler cannot query problems: ", err)
+			log.Println("func catalogueHandler cannot query problems -", err)
 			return
 		}
 		row = db.QueryRow("SELECT count(*) FROM submissions WHERE problem = $1", pbinfo.Pid)
 		err = row.Scan(&total)
 		if err != nil {
 			http.Error(w, http.StatusText(500), http.StatusInternalServerError)
-			log.Println("func catalogueHandler scan problems error: ", err)
+			log.Println("func catalogueHandler scan problems error -", err)
 			return
 		}
 		pbinfo.Acceptance = strconv.FormatFloat(ac/total*100, 'f', 2, 32)
@@ -262,11 +262,11 @@ func problemHandler(w http.ResponseWriter, r *http.Request) {
 	switch {
 	case err == sql.ErrNoRows:
 		http.NotFound(w, r)
-		log.Println("func problemHandler error: problem ", pid, " not found")
+		log.Println("func problemHandler error - problem ", pid, " not found")
 		return
 	case err != nil:
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
-		log.Println("func problemHandler error: problem ", pid, " query error")
+		log.Println("func problemHandler error - problem ", pid, " query error")
 		return
 	}
 	pb.SampleInput = template.HTML(SampleInput)
@@ -287,7 +287,7 @@ func submitHandler(w http.ResponseWriter, r *http.Request) {
 	f, err := os.Create("../../filesystem/submissions/" + strconv.FormatUint(rid, 10) + "." + r.FormValue("compiler"))
 	if err != nil {
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
-		log.Println("func submitHandler create file error: ", err)
+		log.Println("func submitHandler create file error -", err)
 		return
 	}
 	defer f.Close()
@@ -295,12 +295,12 @@ func submitHandler(w http.ResponseWriter, r *http.Request) {
 	_, err = f.WriteString(r.FormValue("code"))
 	if err != nil {
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
-		log.Println("func submitHandle write file error: ", err)
+		log.Println("func submitHandle write file error -", err)
 		return
 	}
 	f.Sync()
 
-	// get file type 
+	// get file type
 	var ftype int
 	switch r.FormValue("compiler") {
 	case "c":
@@ -308,10 +308,20 @@ func submitHandler(w http.ResponseWriter, r *http.Request) {
 	case "c++":
 		ftype = 1
 	}
-	// res, err := operateFile(rid, ftype, )
-	fmt.Println(ftype)
-	fmt.Println(r.FormValue("pid"))
 
+	// get problem ID
+	var pid int
+	pid = 1000
+
+	res := operateFile(rid, ftype, 1000)
+	_, err = db.Exec("INSERT INTO submissions (rid, username, problem, result, submit_time, language) VALUES ($1, $2, $3, $4, $5, $6)",
+		rid, mem.ID, pid, res, time.Now(), ftype)
+	if err != nil {
+		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+		log.Println("func submitHandler insert submission info error -", err)
+		return
+	}
+	
 	http.Redirect(w, r, "/status", http.StatusSeeOther)
 }
 
@@ -324,6 +334,7 @@ func statusHandler(w http.ResponseWriter, r *http.Request) {
 	rows, err := db.Query("SELECT * FROM submissions ORDER BY rid DESC LIMIT 20")
 	if err != nil {
 		http.Error(w, http.StatusText(500), 500)
+		log.Println("func statusHandler cannot query submissions -", err)
 		return
 	}
 	defer rows.Close()
@@ -338,6 +349,7 @@ func statusHandler(w http.ResponseWriter, r *http.Request) {
 		err := rows.Scan(&sub.RID, &sub.Username, &sub.Problem, &res, &sub.RunTime, &sub.Memory, &st, &lan)
 		if err != nil {
 			http.Error(w, http.StatusText(500), 500)
+			log.Println("func statusHandler scan submissions erro -", err)
 			return
 		}
 
@@ -384,8 +396,8 @@ func statusHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl.ExecuteTemplate(w, "status.html", subs)
 }
 
+// TODO: display history code in page
 func codeHandler(w http.ResponseWriter, r *http.Request) {
-	// TODO:
 	if r.Method != http.MethodGet {
 		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
 		return

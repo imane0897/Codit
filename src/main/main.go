@@ -11,14 +11,6 @@ import (
 )
 
 func init() {
-	// write log to file
-	LogFile, err := os.OpenFile("../../filesystem/logfile", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	if err != nil {
-		log.Println("func init cannot open log file: ", err)
-	}
-	defer LogFile.Close()
-	log.SetOutput(LogFile)
-
 	// parse templates
 	tmpl = template.Must(template.ParseGlob("../../view/*.html"))
 
@@ -29,22 +21,29 @@ func init() {
 	}
 
 	if err = db.Ping(); err != nil {
-		log.Println("database connect error: ", err)
+		log.Fatal(err)
 	} else {
 		log.Println("Connected to the database")
 	}
 
 	// init variables
-	row := db.QueryRow("SELECT rid FROM submissions LIMIT 1")
+	row := db.QueryRow("SELECT rid FROM submissions ORDER BY rid DESC LIMIT 1")
 	err = row.Scan(&rid)
 	if err != nil {
-		log.Println("cannot get last rid: ", err)
+		log.Println("cannot get last rid - ", err)
 	}
 }
 
 func main() {
-	http.Handle("/", http.FileServer(http.Dir("../../view/")))
+	// write log to file
+	logFile, err := os.OpenFile("../../filesystem/logfile", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatal("func init cannot open log file: ", err)
+	}
+	defer logFile.Close()
+	log.SetOutput(logFile)
 
+	http.Handle("/", http.FileServer(http.Dir("../../view/")))
 	http.HandleFunc("/signup", signupHandler)
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/logout", logoutHandler)
@@ -54,6 +53,6 @@ func main() {
 	http.HandleFunc("/submit", submitHandler)
 	http.HandleFunc("/problem", problemHandler)
 	http.HandleFunc("/code", codeHandler)
-
-	http.ListenAndServe(":9090", nil)
+	
+	log.Fatal(http.ListenAndServe(":9090", nil))
 }

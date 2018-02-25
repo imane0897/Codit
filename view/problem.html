@@ -11,71 +11,25 @@
   <title>{{.Title}} - Codit</title>
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/reset.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/site.css">
-
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/container.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/grid.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/header.css">
-  <link rel="stylesheet" type="text/css" href="semantic/dist/components/image.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/menu.css">
-
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/divider.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/dropdown.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/segment.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/button.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/list.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/transition.css">
-
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/icon.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/tab.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/input.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/dropdown.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/table.css">
 
-
   <link rel="stylesheet" href="assets/library/pages.css">
   <link rel="stylesheet" href="assets/codemirror/lib/codemirror.css">
   <link rel="stylesheet" href="assets/codemirror/theme/solarized.css">
-
-  <script src="assets/library/jquery.min.js"></script>
-  <script src="semantic/dist/components/tab.js"></script>
-  <script src="semantic/dist/components/dropdown.js"></script>
-  <script src="semantic/dist/components/transition.js"></script>
-  <script src="assets/codemirror/lib/codemirror.js"></script>
-  <script src="assets/codemirror/mode/cmake/cmake.js"></script>
-
-  <script>
-    $(document)
-      .ready(function () {
-        var myCodeMirror = CodeMirror.fromTextArea(document.getElementById("editor"), {
-          mode: "cmake",
-          theme: "solarized",
-          lineNumbers: true,
-          value: "put your code here"
-        });
-
-        $('.ui.selection.dropdown')
-          .dropdown({
-            onChange: function () {
-              var lan = $('.ui.dropdown')
-                .dropdown('get value');
-              if (lan == "c") {
-                myCodeMirror.getDoc().setValue(
-                  "#include <stdio.h> \nint main(void) {\n\tprintf(\"Hello World!\\n\");\n\treturn 0;\n}");
-              } else if (lan == "cpp") {
-                myCodeMirror.getDoc().setValue(
-                  "#include <iostream>\nusing namespace std;\nint main() {\n\tcout << \"Hello World!\" << endl;\n\treturn 0;\n}"
-                );
-              } else if (lan == "java") {
-                myCodeMirror.getDoc().setValue(
-                  "class myjavaprog \n{\n\tpublic static void main(String args[])\n\t{\n\tSystem.out.println(\"Hello World!\");\n\t}\n}"
-                );
-              }
-            }
-          });
-      });
-
-  </script>
-
 </head>
 
 <body>
@@ -194,4 +148,43 @@
   </div>
 </body>
 
+  <script src="assets/library/jquery.min.js"></script>
+  <script src="semantic/dist/components/tab.js"></script>
+  <script src="semantic/dist/components/dropdown.js"></script>
+  <script src="semantic/dist/components/transition.js"></script>
+  <script src="assets/codemirror/lib/codemirror.js"></script>
+  <script src="assets/codemirror/mode/cmake/cmake.js"></script>
+
+  <script>
+    $(document)
+      .ready(function () {
+        var myCodeMirror = CodeMirror.fromTextArea(document.getElementById("editor"), {
+          mode: "cmake",
+          theme: "solarized",
+          lineNumbers: true,
+          value: "put your code here"
+        });
+
+        $('.ui.selection.dropdown')
+          .dropdown({
+            onChange: function () {
+              var lan = $('.ui.dropdown')
+                .dropdown('get value');
+              if (lan == "c") {
+                myCodeMirror.getDoc().setValue(
+                  "#include <stdio.h> \nint main(void) {\n\tprintf(\"Hello World!\\n\");\n\treturn 0;\n}");
+              } else if (lan == "cpp") {
+                myCodeMirror.getDoc().setValue(
+                  "#include <iostream>\nusing namespace std;\nint main() {\n\tcout << \"Hello World!\" << endl;\n\treturn 0;\n}"
+                );
+              } else if (lan == "java") {
+                myCodeMirror.getDoc().setValue(
+                  "class myjavaprog \n{\n\tpublic static void main(String args[])\n\t{\n\tSystem.out.println(\"Hello World!\");\n\t}\n}"
+                );
+              }
+            }
+          });
+      });
+
+  </script>
 </html>
