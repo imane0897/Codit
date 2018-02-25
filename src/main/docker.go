@@ -16,23 +16,30 @@ func (e *argError) Error() string {
 	return fmt.Sprintf("%d - %s", e.arg, e.prob)
 }
 
-// func main() {
-// 	res := operateFile(8, 1, 1000)
-// 	fmt.Println(res)
-// }
-
-func operateFile(rid uint64, ftype int, pid int) (int) {
+func operateFile(rid uint64, ftype int, pid int) int {
 	err := compileFile(rid, ftype, pid)
 	if err != nil {
+		cmdStr := "rm ../../filesystem/submissions/" + strconv.FormatUint(rid, 10)
+		exec.Command("/bin/sh", "-c", cmdStr).Run()
 		return err.(*argError).arg
 	}
 
 	err = execFile(rid, ftype, pid)
 	if err != nil {
+		cmdStr := "rm ../../filesystem/submissions/" + strconv.FormatUint(rid, 10)
+		exec.Command("/bin/sh", "-c", cmdStr).Run()
+		cmdStr = "rm ../../filesystem/temp/" + strconv.FormatUint(rid, 10)
+		exec.Command("/bin/sh", "-c", cmdStr).Run()
 		return err.(*argError).arg
 	}
 
 	err = compareFile(rid, ftype, pid)
+
+	cmdStr := "rm ../../filesystem/submissions/" + strconv.FormatUint(rid, 10)
+	exec.Command("/bin/sh", "-c", cmdStr).Run()
+	cmdStr = "rm ../../filesystem/temp/" + strconv.FormatUint(rid, 10)
+	exec.Command("/bin/sh", "-c", cmdStr).Run()
+
 	return err.(*argError).arg
 }
 
