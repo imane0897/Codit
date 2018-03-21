@@ -5,24 +5,31 @@
 .purplecode {
     color: #C792EA;
 }
+
 .bluecode {
     color: #82AAFF;
 }
+
 .palebluecode {
     color: #B2CCD6;
 }
+
 .greencode {
     color: #C3E88D;
 }
+
 .cyancode {
     color: #89DDFF;
 }
+
 .violetcode {
     color: #BB80B3;
 }
+
 .orangecode {
     color: #F78C6C;
 }
+
 .whitecode {
     color: whitesmoke;
 }
@@ -32,92 +39,112 @@
     color: white;
     margin-top: 0.4em;
 }
+
 .coditscroll {
     font-size: 2em;
-    color:black;
+    color: black;
     margin-top: 0.5em;
     margin-bottom: 0.1em;
 }
-.heading {
-    font-family: Raleway, sans-serif;
+
+h1.heading {
+    font-family: Raleway, 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     font-weight: 500;
     font-size: 50px;
     line-height: 50px;
     padding-top: 100px;
     padding-bottom: 80px;
 }
+
 .text-center {
-    text-align:center;
+    text-align: center;
     margin-left: 0;
     margin-right: 0;
 }
-.container-lrg,.container-sml {
-    margin:auto;
-    width:100%;
-}
-.container-lrg {
-    display:flex;
-    max-width:1080px;
-}
-.container-sml {
-    max-width:700px;
-}
-.centerdevices,.sidedevices {
-    position:relative;
 
+.container-lrg,
+.container-sml {
+    margin: auto;
+    width: 100%;
 }
+
+.container-lrg {
+    display: flex;
+    max-width: 1080px;
+}
+
+.container-sml {
+    max-width: 700px;
+}
+
+.centerdevices,
+.sidedevices {
+    position: relative;
+}
+
 .centerdevices {
-    margin:0 0 60px;
+    margin: 0 0 60px;
 }
+
 .editor-window {
-    background-color:#141414;
-    border-radius:5px 5px 0 0;
+    background-color: #141414;
+    border-radius: 5px 5px 0 0;
 }
+
 .editor-window .editor-menubar {
-    background-color:#E5E4E4;
-    height:50px;
-    display:flex;
-    align-items:flex-start;
-    border-radius:5px 5px 0 0;
+    background-color: #E5E4E4;
+    height: 50px;
+    display: flex;
+    align-items: flex-start;
+    border-radius: 5px 5px 0 0;
 }
-.editor-window code,.editor-window code span {
-    font-family:Menlo,'DejaVu Sans Mono','Lucida Console',monospace;
-    font-size:14pt;
+
+.editor-window code,
+.editor-window code span {
+    font-family: Menlo, 'DejaVu Sans Mono', 'Lucida Console', monospace;
+    font-size: 14pt;
 }
+
 .editor-window pre {
-    overflow-x:auto;
-    border-radius:0 0 5px 5px;
-    padding-left:20px;
-    height:100%;
+    overflow-x: auto;
+    border-radius: 0 0 5px 5px;
+    padding-left: 20px;
+    height: 100%;
 }
+
 .editor-menubar>.editor-button {
-    border-radius:50%;
-    height:10px;
-    width:10px;
-    margin:0 2px;
-    box-shadow:0px 0px 10px 1px;
+    border-radius: 50%;
+    height: 10px;
+    width: 10px;
+    margin: 0 2px;
+    box-shadow: 0px 0px 10px 1px;
 }
+
 .editor-filename {
-    color:#141414;
-    font-family:Menlo,'DejaVu Sans Mono','Lucida Console',monospace;
-    font-size:12pt;
-    font-weight:600;
-    margin-left:10px;
+    color: #141414;
+    font-family: Menlo, 'DejaVu Sans Mono', 'Lucida Console', monospace;
+    font-size: 12pt;
+    font-weight: 600;
+    margin-left: 10px;
 }
+
 .editor-menubar .close {
-    background-color:red;
-    margin-left:10px;
+    background-color: red;
+    margin-left: 10px;
 }
+
 .editor-menubar .minimize {
-    background-color:yellow;
+    background-color: yellow;
 }
+
 .editor-menubar .maximize {
-    background-color:green;
+    background-color: green;
 }
+
 div.logo-cli {
-    height:100%;
+    height: 100%;
     color: whitesmoke;
-    background-color:#002b36;
+    background-color: #002b36;
     line-height: 1.7em;
     text-align: left;
     padding-left: 30px;
@@ -126,62 +153,90 @@ div.logo-cli {
 .hidden.menu {
     display: none;
 }
-.col-1,.col-2,.col-3,.col-4,.col-5,.col-6,.col-7,.col-8,.col-9,.col-10,.col-11,.col-12 {
-    padding:0 20px;
-}
-.col-1 {
-    width:8.333333%;
-}
-.col-2 {
-    width:16.666667%;
-}
-.col-3 {
-    width:25%;
-}
-.col-4 {
-    width:33.333333%;
-}
-.col-5 {
-    width:41.666667%;
-}
-.col-6 {
-    width:50%;
-}
-.col-7 {
-    width:58.333333%;
-}
-.col-8 {
-    width:66.666667%;
-}
-.col-9 {
-    width:75%;
-}
-.col-10 {
-    width:83.333333%;
-}
-.col-11 {
-    width:91.666667%;
-}
+
+.col-1,
+.col-2,
+.col-3,
+.col-4,
+.col-5,
+.col-6,
+.col-7,
+.col-8,
+.col-9,
+.col-10,
+.col-11,
 .col-12 {
-    width:100%;
+    padding: 0 20px;
+}
+
+.col-1 {
+    width: 8.333333%;
+}
+
+.col-2 {
+    width: 16.666667%;
+}
+
+.col-3 {
+    width: 25%;
+}
+
+.col-4 {
+    width: 33.333333%;
+}
+
+.col-5 {
+    width: 41.666667%;
+}
+
+.col-6 {
+    width: 50%;
+}
+
+.col-7 {
+    width: 58.333333%;
+}
+
+.col-8 {
+    width: 66.666667%;
+}
+
+.col-9 {
+    width: 75%;
+}
+
+.col-10 {
+    width: 83.333333%;
+}
+
+.col-11 {
+    width: 91.666667%;
+}
+
+.col-12 {
+    width: 100%;
 }
 
 .masthead.segment {
     min-height: 700px;
     padding: 1em 0em;
 }
+
 .masthead .logo.item img {
     margin-right: 1em;
 }
+
 .masthead .ui.menu .ui.button {
     margin-left: 0.5em;
 }
+
 .masthead h1.ui.header {
     margin-top: 3em;
     margin-bottom: 0em;
     font-size: 4em;
     font-weight: normal;
 }
+
 .masthead h2 {
     font-size: 1.7em;
     font-weight: normal;
@@ -190,19 +245,24 @@ div.logo-cli {
 .ui.vertical.stripe {
     padding: 8em 0em;
 }
+
 .ui.vertical.stripe h3 {
     font-size: 2em;
 }
-.ui.vertical.stripe .button + h3,
-.ui.vertical.stripe p + h3 {
+
+.ui.vertical.stripe .button+h3,
+.ui.vertical.stripe p+h3 {
     margin-top: 3em;
 }
+
 .ui.vertical.stripe .floated.image {
     clear: both;
 }
+
 .ui.vertical.stripe p {
     font-size: 1.33em;
 }
+
 .ui.vertical.stripe .horizontal.divider {
     margin: 3em 0em;
 }
@@ -210,6 +270,7 @@ div.logo-cli {
 .quote.stripe.segment {
     padding: 0em;
 }
+
 .quote.stripe.segment .grid .column {
     padding-top: 5em;
     padding-bottom: 5em;
@@ -249,11 +310,13 @@ div.logo-cli {
 
 @media (max-width: 350px) {
     .header .editor-window code span {
-        font-size:14px;
+        font-size: 14px;
     }
 }
+
 @media (max-width: 420px) {
-    .editor-window code,.editor-window code span {
-        font-size:16px;
+    .editor-window code,
+    .editor-window code span {
+        font-size: 16px;
     }
 }
