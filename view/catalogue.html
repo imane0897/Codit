@@ -31,11 +31,13 @@
   <!-- Page Contents -->
   <div class="ui inverted segment">
     <div class="ui inverted menu">
-      <div class="coditheader">Co<span class="d">d</span>it</div>
+      <div class="coditheader">Co
+        <span class="d">d</span>it</div>
       <a class="item">Problems</a>
       <a class="item" href="status">Status</a>
       <a class="item">Contest</a>
       <a class="item">Discuss</a>
+
       <div class="item right" style="padding-left:4em">
         <div class="ui dropdown">
           <div class="text" id="username"></div>
@@ -58,9 +60,6 @@
       </div>
     </div>
   </div>
-  <br>
-  <br>
-
 
   <div class="ui container">
     <div class="ui search">
@@ -144,28 +143,28 @@
 </body>
 
 <script src="assets/library/jquery.min.js"></script>
-  <script src="semantic/dist/components/visibility.js"></script>
-  <script src="semantic/dist/components/sidebar.js"></script>
-  <script src="semantic/dist/components/transition.js"></script>
-  <script src="semantic/dist/components/dropdown.js"></script>
-  <script src="assets/library/tablesort.js"></script>
+<script src="semantic/dist/components/visibility.js"></script>
+<script src="semantic/dist/components/sidebar.js"></script>
+<script src="semantic/dist/components/transition.js"></script>
+<script src="semantic/dist/components/dropdown.js"></script>
+<script src="assets/library/tablesort.js"></script>
 
-  <script>
-    $(document)
-      .ready(function () {
-        $('.ui.dropdown')
-          .dropdown();
-        $('table').tablesort();
+<script>
+  $(document)
+    .ready(function () {
+      $('.ui.dropdown')
+        .dropdown();
+      $('table').tablesort();
 
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', '/userinfo', true);
-        xhr.onreadystatechange = function () {
-          if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-            document.getElementById('username').insertAdjacentHTML('beforeend', xhr.responseText);
-          }
-        };
-        xhr.send();
-      });
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '/userinfo', true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+          document.getElementById('username').insertAdjacentHTML('beforeend', xhr.responseText);
+        }
+      };
+      xhr.send();
+    });
+</script>
 
-  </script>
 </html>

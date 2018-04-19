@@ -34,17 +34,19 @@
   <!-- Page Contents -->
   <div class="ui inverted segment">
     <div class="ui inverted menu">
-      <div class="coditheader">Co<span class="d">d</span>it</div>
+      <div class="coditheader">Co
+        <span class="d">d</span>it</div>
       <a class="item" href="catalogue">Problems</a>
       <a class="item">Status</a>
       <a class="item">Contest</a>
       <a class="item">Discuss</a>
     </div>
   </div>
-  <br>
-  
+
   <div class="ui container">
-    <h3><a>{{.Title}}</a></h3>
+    <h3>
+      <a>{{.Title}}</a>
+    </h3>
     <textarea id="editor">{{.Code}}</textarea>
   </div>
 
@@ -76,18 +78,44 @@
     </div>
     <br>
   </div>
+
+  <!-- footer -->
+  <div class="ui inverted vertical footer">
+    <div class="ui container">
+      <hr class="style-two">
+      <br>
+      <div class="ui stackable inverted divided equal height stackable grid">
+        <div class="three wide column text-center">
+          <p>Copyright &copy; 2018&ensp; Codit</p>
+        </div>
+        <div class="four wide column">
+        </div>
+        <div class="two wide column text-center">
+          <p>Contact&nbsp; Us</p>
+        </div>
+        <div class="four wide column text-center">
+          <p>Frequently&nbsp; Asked&nbsp; Questions</p>
+        </div>
+        <div class="three wide column text-center">
+          <p>Terms&nbsp; of&nbsp; Service</p>
+        </div>
+      </div>
+    </div>
+    <br>
+  </div>
 </body>
 
 <script src="assets/library/jquery.min.js"></script>
-  <script src="assets/codemirror/lib/codemirror.js"></script>
+<script src="assets/codemirror/lib/codemirror.js"></script>
 
-  <script>
-    $(document)
-      .ready(function () {
-        var myCodeMirror = CodeMirror.fromTextArea(document.getElementById("editor"), {
-          lineNumbers: true,
-          value: "put your code here ..."
-        });
+<script>
+  $(document)
+    .ready(function () {
+      var myCodeMirror = CodeMirror.fromTextArea(document.getElementById("editor"), {
+        lineNumbers: true,
+        value: "put your code here ..."
       });
-  </script>
+    });
+</script>
+
 </html>

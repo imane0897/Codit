@@ -39,5 +39,6 @@ hr.style-two {
 }
 
 .ui.inverted.segment {
-  border-radius: 0px
+  border-radius: 0px;
+  margin-bottom: 5em;
 }
