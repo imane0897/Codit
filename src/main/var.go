@@ -92,9 +92,9 @@ type Session struct {
 type Problem struct {
 	Pid          int
 	Title        string
-	Description  string
-	Input        string
-	Output       string
+	Description  template.HTML
+	Input        template.HTML
+	Output       template.HTML
 	SampleInput  template.HTML
 	SampleOutput template.HTML
 	Level        int

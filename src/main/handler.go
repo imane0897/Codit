@@ -256,9 +256,9 @@ func problemHandler(w http.ResponseWriter, r *http.Request) {
 	row := db.QueryRow("SELECT * FROM problems WHERE pid = $1", pid)
 
 	pb := Problem{}
-	var SampleInput, SampleOutput string
-	err := row.Scan(&pb.Pid, &pb.Title, &pb.Description, &pb.Input, &pb.Output,
-		&SampleInput, &SampleOutput, &pb.Level)
+	var description, input, output, sampleInput, sampleOutput string
+	err := row.Scan(&pb.Pid, &pb.Title, &description, &input, &output,
+		&sampleInput, &sampleOutput, &pb.Level)
 	switch {
 	case err == sql.ErrNoRows:
 		http.NotFound(w, r)
@@ -269,8 +269,11 @@ func problemHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println("func problemHandler error - problem ", pid, " query error")
 		return
 	}
-	pb.SampleInput = template.HTML(SampleInput)
-	pb.SampleOutput = template.HTML(SampleOutput)
+	pb.Description = template.HTML(description)
+	pb.Input = template.HTML(input)
+	pb.Output = template.HTML(output)
+	pb.SampleInput = template.HTML(sampleInput)
+	pb.SampleOutput = template.HTML(sampleOutput)
 
 	tmpl.ExecuteTemplate(w, "problem.html", pb)
 }
