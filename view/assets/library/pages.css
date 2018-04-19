@@ -42,3 +42,7 @@ hr.style-two {
   border-radius: 0px;
   margin-bottom: 5em;
 }
+
+.ui.inverted.vertical.footer {
+  margin-top: 8em;
+}
