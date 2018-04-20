@@ -54,7 +54,8 @@
                 </div>
                 <div class="field">
                     <label>Level</label>
-                    <select name="level">
+                    <select id="level" name="level" class="ui dropdown">
+                        <option value="">Level</option>
                         <option value="0">0</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -122,8 +123,9 @@
 <script>
     $(document)
         .ready(function () {
-            $('ui.dropdown')
+            $('.ui.dropdown')
                 .dropdown();
+
             $('.ui.form')
                 .form({
                     fields: {

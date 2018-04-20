@@ -46,3 +46,21 @@ hr.style-two {
 .ui.inverted.vertical.footer {
   margin-top: 8em;
 }
+
+.instruction {
+  padding: 1.5em;
+  border-width: 2px;
+  border-style: solid;
+  border-color: #eee;
+  border-left-width: 5px;
+  border-left-color: #5bc0de;
+  margin-bottom: 1.5em;
+}
+
+.instruction h3 {
+  color: #5bc0de;
+}
+
+.ui.fluid.primary.button {
+  margin-bottom: 1em;
+}
