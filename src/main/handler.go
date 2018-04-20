@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"log"
@@ -75,7 +76,7 @@ func signupHandler(w http.ResponseWriter, r *http.Request) {
 		// redirect
 		user.ID = un
 		http.Redirect(w, r, "/catalogue", http.StatusSeeOther)
-		log.Println(user.ID + "signed up successfully")
+		log.Println(user.ID + " signed up successfully")
 		return
 	}
 	tmpl.ExecuteTemplate(w, "signup.html", nil)
@@ -324,7 +325,7 @@ func submitHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println("func submitHandler insert submission info error -", err)
 		return
 	}
-	
+
 	http.Redirect(w, r, "/status", http.StatusSeeOther)
 }
 
@@ -410,5 +411,54 @@ func codeHandler(w http.ResponseWriter, r *http.Request) {
 	if rid == "" {
 		http.Error(w, http.StatusText(400), http.StatusBadRequest)
 		return
+	}
+}
+
+func newHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("turned to func newProblem " + r.Method)
+	if r.Method == http.MethodPost {
+		fmt.Println("post request")
+		fmt.Println(r.FormValue("title"))
+		fmt.Println(r.FormValue("level"))
+		fmt.Println(r.FormValue("description"))
+		fmt.Println(r.FormValue("input"))
+		fmt.Println(r.FormValue("output"))
+		fmt.Println(r.FormValue("sample_input"))
+		fmt.Println(r.FormValue("sample_output"))
+	}
+	tmpl.ExecuteTemplate(w, "newproblem.html", nil)
+}
+
+func editHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodGet {
+		pid := r.FormValue("pid")
+		if pid == "" {
+			tmpl.ExecuteTemplate(w, "editProblem.html", nil)
+			return
+		}
+
+		// get problem info from db
+		row := db.QueryRow("SELECT * FROM problems WHERE pid = $1", pid)
+
+		pb := ProblemString{}
+		err := row.Scan(&pb.Pid, &pb.Title, &pb.Description, &pb.Input, &pb.Output,
+			&pb.SampleInput, &pb.SampleOutput, &pb.Level)
+		switch {
+		case err == sql.ErrNoRows:
+			http.NotFound(w, r)
+			log.Println("func problemHandler error - problem ", pid, " not found")
+			return
+		case err != nil:
+			http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+			log.Println("func problemHandler error - problem ", pid, " query error")
+			return
+		}
+
+		// encode to JSON
+		response, err := json.Marshal(pb)
+		if err != nil {
+			log.Println("JSON err:", err)
+		}
+		fmt.Fprintf(w, string(response))
 	}
 }

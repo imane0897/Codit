@@ -53,6 +53,8 @@ func main() {
 	http.HandleFunc("/submit", submitHandler)
 	http.HandleFunc("/problem", problemHandler)
 	http.HandleFunc("/code", codeHandler)
+	http.HandleFunc("/newproblem", newHandler)
+	http.HandleFunc("/editproblem", editHandler)
 	
 	log.Fatal(http.ListenAndServe(":9090", nil))
 }

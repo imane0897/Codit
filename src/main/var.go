@@ -2,10 +2,10 @@ package main
 
 import (
 	"database/sql"
-	_ "github.com/lib/pq"
 	"html/template"
 	"time"
-	// "os"
+
+	_ "github.com/lib/pq"
 )
 
 var db *sql.DB
@@ -111,4 +111,17 @@ type ProblemInfo struct {
 	Level3     bool
 	Level4     bool
 	State      bool
+}
+
+
+// ProblemString is used to convey problem info in JSON format
+type ProblemString struct {
+	Pid          int
+	Title        string
+	Description  string
+	Input        string
+	Output       string
+	SampleInput  string
+	SampleOutput string
+	Level        int
 }

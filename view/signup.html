@@ -37,16 +37,15 @@
     .column {
       max-width: 450px;
     }
-
   </style>
-  
+
 </head>
 
 <body>
   <div class="ui middle aligned center aligned grid">
     <div class="column">
       <div>
-        <h2 class="ui header" , style="font-size:3.5em">Co<span style="color:#fbcf61;font-weight:bold">d</span>it</h2>
+        <h2 class="ui header" , style="font-size:3.5em">Co<span class="d">d</span>it</h2>
       </div>
       <h2 class="ui image header">
         <div class="content">
@@ -75,9 +74,7 @@
           </div>
           <input type="submit" value="Sigup" class="ui fluid large yellow button" />
         </div>
-
         <div class="ui error message"></div>
-
       </form>
 
       <div class="ui message">
@@ -88,62 +85,61 @@
   </div>
 </body>
 
-  <script src="assets/library/jquery.min.js"></script>
-  <script src="semantic/dist/components/form.js"></script>
+<script src="assets/library/jquery.min.js"></script>
+<script src="semantic/dist/components/form.js"></script>
+<script>
+  $(document)
+    .ready(function () {
 
-  <script>
-    $(document)
-      .ready(function () {
-
-        $('.ui.form')
-          .form({
-            fields: {
-              username: {
-                identifier: 'username',
-                rules: [{
-                    type: 'empty',
-                    prompt: 'Please enter your username'
-                  },
-                  {
-                    type: 'minLength[3]',
-                    prompt: 'Your username must be more than 3 characters'
-                  },
-                  {
-                    type: 'maxLength[10]',
-                    prompt: 'Your username must be less than 10 characters'
-                  }
-                ]
-              },
-              password: {
-                identifier: 'password',
-                rules: [{
-                    type: 'empty',
-                    prompt: 'Please enter your password'
-                  },
-                  {
-                    type: 'minLength[6]',
-                    prompt: 'Your password must be at least 6 characters'
-                  },
-                  {
-                    type: 'maxLength[30]',
-                    prompt: 'Your password must be limited to 30 characters'
-                  }
-                ]
-              },
-              password2: {
-                identifier: 'password2',
-                rules: [{
-                    type: 'match[password]',
-                    prompt: 'Your passwords did not match. Please re-enter your passwords'
-                  },
-                  {
-                    type: 'empty'
-                  }
-                ]
-              }
+      $('.ui.form')
+        .form({
+          fields: {
+            username: {
+              identifier: 'username',
+              rules: [{
+                  type: 'empty',
+                  prompt: 'Please enter your username'
+                },
+                {
+                  type: 'minLength[3]',
+                  prompt: 'Your username must be more than 3 characters'
+                },
+                {
+                  type: 'maxLength[10]',
+                  prompt: 'Your username must be less than 10 characters'
+                }
+              ]
+            },
+            password: {
+              identifier: 'password',
+              rules: [{
+                  type: 'empty',
+                  prompt: 'Please enter your password'
+                },
+                {
+                  type: 'minLength[6]',
+                  prompt: 'Your password must be at least 6 characters'
+                },
+                {
+                  type: 'maxLength[30]',
+                  prompt: 'Your password must be limited to 30 characters'
+                }
+              ]
+            },
+            password2: {
+              identifier: 'password2',
+              rules: [{
+                  type: 'match[password]',
+                  prompt: 'Your passwords did not match. Please re-enter your passwords'
+                },
+                {
+                  type: 'empty'
+                }
+              ]
             }
-          });
-      });
+          }
+        });
+    });
+</script>
 
-  </script>
 </html>

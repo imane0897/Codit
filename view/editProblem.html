@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
     <!-- Site Properties -->
-    <title>New Problem</title>
+    <title>Edit Problem</title>
     <link rel="stylesheet" type="text/css" href="semantic/dist/components/reset.css">
     <link rel="stylesheet" type="text/css" href="semantic/dist/components/site.css">
     <link rel="stylesheet" type="text/css" href="semantic/dist/components/container.css">
@@ -44,17 +44,33 @@
     </div>
 
     <div class="ui container">
-        <form class="ui form" method="post" action="/newproblem">
-            <div class="two fields">
+        <form class="ui form" method="post" action="/editproblem">
+            <div class="three fields">
+                <div class="field">
+                    <label>Problem ID</label>
+                    <div class="ui fluid search selection dropdown">
+                        <input id="pid" name="pid" type="hidden">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">Select Problem ID</div>
+                        <div class="menu">
+                            <div class="item" data-value="1000">1000</div>
+                            <div class="item" data-value="1001">1001</div>
+                            <div class="item" data-value="1002">1002</div>
+                            <div class="item" data-value="1003">1003</div>
+                            <div class="item" data-value="1004">1004</div>
+                        </div>
+                    </div>
+                </div>
                 <div class="field">
                     <label>Title</label>
                     <div class="ui fluid input">
-                        <input type="text" name="title" placeholder="Question title">
+                        <input id="title" name="title" placeholder="Question title" type="text">
                     </div>
                 </div>
                 <div class="field">
                     <label>Level</label>
-                    <select name="level">
+                    <select id="level" name="level" class="ui dropdown">
+                        <option value="">Level</option>
                         <option value="0">0</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -66,23 +82,23 @@
             </div>
             <div class="field">
                 <label>Description</label>
-                <textarea rows="2" name="description" placeholder="Enter question description here"></textarea>
+                <textarea id="description" rows="2" name="description" placeholder="Enter question description here"></textarea>
             </div>
             <div class="field">
                 <label>Input</label>
-                <textarea rows="2" name="input" placeholder="Enter input description here"></textarea>
+                <textarea id="input" rows="2" name="input" placeholder="Enter input description here"></textarea>
             </div>
             <div class="field">
                 <label>Output</label>
-                <textarea rows="2" name="output" placeholder="Enter output description here"></textarea>
+                <textarea id="output" rows="2" name="output" placeholder="Enter output description here"></textarea>
             </div>
             <div class="field">
                 <label>Sample Input</label>
-                <textarea rows="4" name="sample_input" placeholder="Enter sample input here"></textarea>
+                <textarea id="sample_input" rows="4" name="sample_input" placeholder="Enter sample input here"></textarea>
             </div>
             <div class="field">
                 <label>Sample Output</label>
-                <textarea rows="4" name="sample_output" placeholder="Enter sample output here"></textarea>
+                <textarea id="sample_output" rows="4" name="sample_output" placeholder="Enter sample output here"></textarea>
             </div>
             <div class="ui error message"></div>
             <input type="submit" value="Submit" class="ui fluid large black button" />
@@ -122,8 +138,37 @@
 <script>
     $(document)
         .ready(function () {
-            $('ui.dropdown')
+            $('.ui.dropdown')
                 .dropdown();
+            $('.ui.fluid.search.selection.dropdown')
+                .dropdown({
+                    onChange: function (val) {
+                        req = new XMLHttpRequest();
+                        if (req == null) {
+                            alert('Uable to create request');
+                            return;
+                        }
+                        var url = '/editproblem?pid=' + escape(val);
+                        req.open('GET', url, true);
+                        req.onreadystatechange = function () {
+                            if (req.readyState == 4) {
+                                console.log(req.status);
+                                if (req.status == 200) {
+                                    var problemInfo = eval('(' + req.responseText + ')');
+                                    document.getElementById('title').value = problemInfo.Title;
+                                    $('.ui.dropdown').has('#level').dropdown('set selected',
+                                        problemInfo.Level.toString());
+                                    document.getElementById('description').value = problemInfo.Description;
+                                    document.getElementById('input').value = problemInfo.Input;
+                                    document.getElementById('output').value = problemInfo.Output;
+                                    document.getElementById('sample_input').value = problemInfo.SampleInput;
+                                    document.getElementById('sample_output').value = problemInfo.SampleOutput;
+                                }
+                            }
+                        }
+                        req.send(null);
+                    }
+                });
             $('.ui.form')
                 .form({
                     fields: {
