@@ -89,6 +89,7 @@ type Session struct {
 // output        |      text
 // sample_input  |      text
 // sample_output |      text
+// level         |      int
 type Problem struct {
 	Pid          int
 	Title        string

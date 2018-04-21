@@ -413,7 +413,7 @@ func codeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
-
+// TODO: 
 func newHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("turned to func newProblem " + r.Method)
 	if r.Method == http.MethodPost {
@@ -446,19 +446,43 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 		switch {
 		case err == sql.ErrNoRows:
 			http.NotFound(w, r)
-			log.Println("func problemHandler error - problem ", pid, " not found")
+			log.Println("func editHandler problem ", pid, " not found - ", err)
 			return
 		case err != nil:
 			http.Error(w, http.StatusText(500), http.StatusInternalServerError)
-			log.Println("func problemHandler error - problem ", pid, " query error")
+			log.Println("func editHandler problem ", pid, " query error - ", err)
 			return
 		}
 
 		// encode to JSON
 		response, err := json.Marshal(pb)
 		if err != nil {
-			log.Println("JSON err:", err)
+			http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+			log.Println("func editHandler JSON marshal err - ", err)
+			return
 		}
 		fmt.Fprintf(w, string(response))
+	}
+
+	if r.Method == http.MethodPost {
+		pb := ProblemString{}
+		pb.Pid, _ = strconv.Atoi(r.FormValue("pid"))
+		pb.Title = r.FormValue("title")
+		pb.Level, _ = strconv.Atoi(r.FormValue("level"))
+		pb.Description = r.FormValue("description")
+		pb.Input = r.FormValue("input")
+		pb.Output = r.FormValue("output")
+		pb.SampleInput = r.FormValue("sampleinput")
+		pb.SampleOutput = r.FormValue("sampleoutput")
+
+		_, err := db.Exec("UPDATE problems SET title = $1, level = $2, description = $3, input = $4, output = $5, sample_input = $6, sample_output = $7 WHERE pid = $8",
+			pb.Title, pb.Level, pb.Description, pb.Input, pb.Output, pb.SampleInput, pb.SampleOutput, pb.Pid)
+		if err != nil {
+			http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+			log.Println("func editHandler db update error - ", err)
+			return
+		}
+
+		tmpl.ExecuteTemplate(w, "editProblem.html", nil)
 	}
 }
