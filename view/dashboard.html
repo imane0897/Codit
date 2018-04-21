@@ -171,7 +171,7 @@
                             if (req.readyState == 4) {
                                 console.log(req.status);
                                 if (req.status == 200) {
-                                    var problemInfo = eval('(' + req.responseText + ')');
+                                    var problemInfo = parse('(' + req.responseText + ')');
                                     document.getElementById('title').value = problemInfo.Title;
                                     $('.ui.dropdown').has('#level').dropdown('set selected',
                                         problemInfo.Level.toString());
