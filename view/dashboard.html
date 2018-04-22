@@ -65,8 +65,7 @@
                             <div class="ui fluid search selection dropdown">
                                 <input id="pid" name="pid" type="hidden">
                                 <div class="default text">Select Problem ID</div>
-                                <div id="pidlist" class="menu">
-                                </div>
+                                <div id="pidlist" class="menu"></div>
                             </div>
                         </div>
                         <div class="field">
@@ -148,28 +147,61 @@
 <script>
     $(document)
         .ready(function () {
+            $.get('/pidcount', function (data) {
+                len = parseInt(data);
+                for (var i = 0; i < len; i++) {
+                    $('#pidlist').append('<div class="item">' + (1000 + i) + '</div>');
+                }
+                newIndex = len + 1000;
+                $('#pidlist').append('<div class="item">' + newIndex + '</div>');
+            });
+
             $('.ui.dropdown').dropdown();
 
             $('.ui.fluid.search.selection.dropdown').dropdown({
                 onChange: function (val) {
-                    $.getJSON('/editproblem?pid=' + escape(val), function (data) {
-                        $('#title').val(data.Title)
-                        $('.ui.dropdown').has('#level').dropdown('set selected', data.Level.toString());
-                        $('#description').val(data.Description);
-                        $('#input').val(data.Input);
-                        $('#output').val(data.Output);
-                        $('#sampleinput').val(data.SampleInput);
-                        $('#sampleoutput').val(data.SampleOutput);
-                    });
+                    if ($('.ui.dropdown').has('#pid').dropdown('get value') == newIndex.toString()) {
+                        $('form').attr('action', '/newproblem');
+                    } else {
+                        $.getJSON('/editproblem?pid=' + escape(val), function (data) {
+                            $('#title').val(data.Title)
+                            $('.ui.dropdown').has('#level').dropdown('set selected', data.Level.toString());
+                            $('#description').val(data.Description);
+                            $('#input').val(data.Input);
+                            $('#output').val(data.Output);
+                            $('#sampleinput').val(data.SampleInput);
+                            $('#sampleoutput').val(data.SampleOutput);
+                        });
+                    }
                 }
             });
 
-            $.get('/pidcount', function (data) {
-                var len = Number(data);
-                for (var i = 0; i < len; i++) {
-                    $('#pidlist').append('<div class="item">' + (1000 + i) + '</div>');
-                }
-            })
+            $('button.primary').click(function () {
+                $('.ui.dropdown').has('#pid').addClass("disabled");
+                $('form').attr('action', '/newproblem');
+                // clear form
+                $('#title').val('');
+                $('.ui.dropdown').has('#level').dropdown('clear');
+                $('#description').val('');
+                $('#input').val('');
+                $('#output').val('');
+                $('#sampleinput').val('');
+                $('#sampleoutput').val('');
+                $('.ui.dropdown').has('#pid').dropdown('set selected', newIndex.toString());
+            });
+
+            $('button.secondary').click(function () {
+                $('.ui.dropdown').has('#pid').removeClass("disabled");
+                // clear form
+                $('.ui.dropdown').has('#pid').dropdown('set selected', newIndex.toString());
+                $('#title').val('');
+                $('.ui.dropdown').has('#level').dropdown('clear');
+                $('#description').val('');
+                $('#input').val('');
+                $('#output').val('');
+                $('#sampleinput').val('');
+                $('#sampleoutput').val('');
+            });
 
             $('.ui.form').form({
                 fields: {

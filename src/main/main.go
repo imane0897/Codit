@@ -55,6 +55,7 @@ func main() {
 	http.HandleFunc("/code", codeHandler)
 	http.HandleFunc("/dashboard", dashHandler)
 	http.HandleFunc("/editproblem", editHandler)
+	http.HandleFunc("/newproblem", newHandler)
 
 	http.HandleFunc("/userinfo", getUserInfo)
 	http.HandleFunc("/pidcount", getPidCount)
