@@ -408,20 +408,29 @@ func codeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
-// TODO: 
+
 func newHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("turned to func newProblem " + r.Method)
 	if r.Method == http.MethodPost {
-		fmt.Println("post request")
-		fmt.Println(r.FormValue("title"))
-		fmt.Println(r.FormValue("level"))
-		fmt.Println(r.FormValue("description"))
-		fmt.Println(r.FormValue("input"))
-		fmt.Println(r.FormValue("output"))
-		fmt.Println(r.FormValue("sample_input"))
-		fmt.Println(r.FormValue("sample_output"))
+		pb := ProblemString{}
+		pb.Pid, _ = strconv.Atoi(r.FormValue("pid"))
+		pb.Title = r.FormValue("title")
+		pb.Level, _ = strconv.Atoi(r.FormValue("level"))
+		pb.Description = r.FormValue("description")
+		pb.Input = r.FormValue("input")
+		pb.Output = r.FormValue("output")
+		pb.SampleInput = r.FormValue("sampleinput")
+		pb.SampleOutput = r.FormValue("sampleoutput")
+
+		_, err := db.Exec("INSERT INTO problems (pid, title, level, description, input, output, sample_input, sample_output) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
+			pb.Pid, pb.Title, pb.Level, pb.Description, pb.Input, pb.Output, pb.SampleInput, pb.SampleOutput)
+		if err != nil {
+			http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+			log.Println("func editHandler db update error - ", err)
+			return
+		}
+
+		http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
 	}
-	tmpl.ExecuteTemplate(w, "dashboard.html", nil)
 }
 
 func editHandler(w http.ResponseWriter, r *http.Request) {
@@ -429,7 +438,7 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		pid := r.FormValue("pid")
 		if pid == "" {
-			tmpl.ExecuteTemplate(w, "dashboard.html", nil)
+			http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 			return
 		}
 
@@ -460,7 +469,7 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, string(response))
 	}
 
-	// post form 
+	// post form
 	if r.Method == http.MethodPost {
 		pb := ProblemString{}
 		pb.Pid, _ = strconv.Atoi(r.FormValue("pid"))
@@ -480,16 +489,10 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		tmpl.ExecuteTemplate(w, "dashboard.html", nil)
+		http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
 	}
 }
 
-func dashHandler (w http.ResponseWriter, r *http.Request) {
-	if (r.FormValue("type") == "new") {
-		newHandler(w, r)
-	} else if (r.FormValue("type") == "edit") {
-		editHandler(w, r)
-	} else {
-		tmpl.ExecuteTemplate(w, "dashboard.html", nil)
-	}
+func dashHandler(w http.ResponseWriter, r *http.Request) {
+	tmpl.ExecuteTemplate(w, "dashboard.html", nil)
 }
