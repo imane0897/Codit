@@ -17,7 +17,7 @@ $(document)
                     $('form').attr('action', '/newproblem');
                 } else {
                     $.getJSON('/editproblem?pid=' + escape(val), function (data) {
-                        $('#title').val(data.Title)
+                        $('#title').val(data.Title);
                         $('.ui.dropdown').has('#level').dropdown('set selected', data.Level.toString());
                         $('#description').val(data.Description);
                         $('#input').val(data.Input);

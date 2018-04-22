@@ -41,7 +41,7 @@ func signupHandler(w http.ResponseWriter, r *http.Request) {
 		// username taken?
 		row := db.QueryRow("SELECT * FROM members WHERE id = $1", un)
 		user := Member{}
-		err := row.Scan(&user.ID, &user.Password)
+		err := row.Scan(&user.ID, &user.Password, &user.Admin)
 		if err != sql.ErrNoRows {
 			http.Error(w, "Username already taken", http.StatusForbidden)
 			return
@@ -96,7 +96,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		// is there a username?
 		row := db.QueryRow("SELECT * FROM members WHERE id = $1", un)
 		user := Member{}
-		err := row.Scan(&user.ID, &user.Password)
+		err := row.Scan(&user.ID, &user.Password, &user.Admin)
 		if err == sql.ErrNoRows {
 			http.Error(w, "Username and/or password do not match", http.StatusForbidden)
 			return
@@ -395,20 +395,6 @@ func statusHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl.ExecuteTemplate(w, "status.html", subs)
 }
 
-// TODO: display history code in page
-func codeHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
-		return
-	}
-
-	rid := r.FormValue("rid")
-	if rid == "" {
-		http.Error(w, http.StatusText(400), http.StatusBadRequest)
-		return
-	}
-}
-
 func newHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		pb := ProblemString{}
@@ -494,5 +480,22 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func dashHandler(w http.ResponseWriter, r *http.Request) {
+	if isAdmin(w, r) == false {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+	}
 	tmpl.ExecuteTemplate(w, "dashboard.html", nil)
+}
+
+// TODO: display history code in page
+func codeHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
+		return
+	}
+
+	rid := r.FormValue("rid")
+	if rid == "" {
+		http.Error(w, http.StatusText(400), http.StatusBadRequest)
+		return
+	}
 }

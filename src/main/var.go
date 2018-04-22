@@ -21,6 +21,7 @@ var err error
 type Member struct {
 	ID       string
 	Password []byte
+	Admin    bool
 }
 
 // Submission has the info for table display in status.html
@@ -113,7 +114,6 @@ type ProblemInfo struct {
 	Level4     bool
 	State      bool
 }
-
 
 // ProblemString is used to convey problem info in JSON format
 type ProblemString struct {

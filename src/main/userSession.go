@@ -36,7 +36,7 @@ func getUser(w http.ResponseWriter, r *http.Request) Member {
 			log.Println("func getUser error: sql error")
 		}
 		row = db.QueryRow("SELECT * FROM members WHERE id = $1", s.username)
-		err = row.Scan(&mem.ID, &mem.Password)
+		err = row.Scan(&mem.ID, &mem.Password, &mem.Admin)
 		if err != nil {
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			log.Println("func getUser error: cannot get user info")
@@ -61,6 +61,14 @@ func alreadyLoggedIn(w http.ResponseWriter, r *http.Request) bool {
 			log.Println(s.username, "already logged in")
 			return true
 		}
+	}
+	return false
+}
+
+func isAdmin(w http.ResponseWriter, r *http.Request) bool{
+	mem := getUser(w, r)
+	if mem.Admin == true {
+		return true
 	}
 	return false
 }
