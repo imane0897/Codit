@@ -54,24 +54,18 @@
     <div class="ui container">
         <div class="ui grid">
             <div class="five wide column">
-                <a class="ui fluid primary basic button">Add a New Problem</a>
-                <a class="ui fluid secondary basic button">Edit an Existing Problem</a>
+                <button class="ui fluid primary basic button">Add a New Problem</button>
+                <button class="ui fluid secondary basic button">Edit an Existing Problem</button>
             </div>
             <div class="eleven wide column">
-                <form class="ui form" method="post" action="/editproblem">
+                <form class="ui form segment" method="post" action="/editproblem">
                     <div class="three fields">
                         <div class="field">
                             <label>Problem ID</label>
                             <div class="ui fluid search selection dropdown">
                                 <input id="pid" name="pid" type="hidden">
-                                <i class="dropdown icon"></i>
                                 <div class="default text">Select Problem ID</div>
-                                <div class="menu">
-                                    <div class="item" data-value="1000">1000</div>
-                                    <div class="item" data-value="1001">1001</div>
-                                    <div class="item" data-value="1002">1002</div>
-                                    <div class="item" data-value="1003">1003</div>
-                                    <div class="item" data-value="1004">1004</div>
+                                <div id="pidlist" class="menu">
                                 </div>
                             </div>
                         </div>
@@ -154,93 +148,82 @@
 <script>
     $(document)
         .ready(function () {
-            $('.ui.dropdown')
-                .dropdown();
+            $('.ui.dropdown').dropdown();
 
-            $('.ui.fluid.search.selection.dropdown')
-                .dropdown({
-                    onChange: function (val) {
-                        req = new XMLHttpRequest();
-                        if (req == null) {
-                            alert('Uable to create request');
-                            return;
-                        }
-                        var url = '/editproblem?pid=' + escape(val);
-                        req.open('GET', url, true);
-                        req.onreadystatechange = function () {
-                            if (req.readyState == 4) {
-                                console.log(req.status);
-                                if (req.status == 200) {
-                                    var problemInfo = parse('(' + req.responseText + ')');
-                                    document.getElementById('title').value = problemInfo.Title;
-                                    $('.ui.dropdown').has('#level').dropdown('set selected',
-                                        problemInfo.Level.toString());
-                                    document.getElementById('description').value = problemInfo.Description;
-                                    document.getElementById('input').value = problemInfo.Input;
-                                    document.getElementById('output').value = problemInfo.Output;
-                                    document.getElementById('sampleinput').value = problemInfo.SampleInput;
-                                    document.getElementById('sampleoutput').value = problemInfo.SampleOutput;
-                                }
-                            }
-                        }
-                        req.send(null);
-                    }
-                });
+            $('.ui.fluid.search.selection.dropdown').dropdown({
+                onChange: function (val) {
+                    $.getJSON('/editproblem?pid=' + escape(val), function (data) {
+                        $('#title').val(data.Title)
+                        $('.ui.dropdown').has('#level').dropdown('set selected', data.Level.toString());
+                        $('#description').val(data.Description);
+                        $('#input').val(data.Input);
+                        $('#output').val(data.Output);
+                        $('#sampleinput').val(data.SampleInput);
+                        $('#sampleoutput').val(data.SampleOutput);
+                    });
+                }
+            });
 
-            $('.ui.form')
-                .form({
-                    fields: {
-                        title: {
-                            identifier: 'title',
-                            rules: [{
-                                type: 'empty',
-                                prompt: 'Please enter question title'
-                            }]
-                        },
-                        level: {
-                            identifier: 'level',
-                            rules: [{
-                                type: 'empty',
-                                prompt: 'Please select a level for the question'
-                            }]
-                        },
-                        description: {
-                            identifier: 'description',
-                            rules: [{
-                                type: 'empty',
-                                prompt: 'Please enter question description'
-                            }]
-                        },
-                        input: {
-                            identifier: 'input',
-                            rules: [{
-                                type: 'empty',
-                                prompt: 'Please enter question input description'
-                            }]
-                        },
-                        output: {
-                            identifier: 'output',
-                            rules: [{
-                                type: 'empty',
-                                prompt: 'Please enter question output description'
-                            }]
-                        },
-                        sampleinput: {
-                            identifier: 'sampleinput',
-                            rules: [{
-                                type: 'empty',
-                                prompt: 'Please enter question sample input'
-                            }]
-                        },
-                        sampleoutput: {
-                            identifier: 'sampleoutput',
-                            rules: [{
-                                type: 'empty',
-                                prompt: 'Please enter question sample output'
-                            }]
-                        }
+            $.get('/pidcount', function (data) {
+                var len = Number(data);
+                for (var i = 0; i < len; i++) {
+                    $('#pidlist').append('<div class="item">' + (1000 + i) + '</div>');
+                }
+            })
+
+            $('.ui.form').form({
+                fields: {
+                    title: {
+                        identifier: 'title',
+                        rules: [{
+                            type: 'empty',
+                            prompt: 'Please enter question title'
+                        }]
+                    },
+                    level: {
+                        identifier: 'level',
+                        rules: [{
+                            type: 'empty',
+                            prompt: 'Please select a level for the question'
+                        }]
+                    },
+                    description: {
+                        identifier: 'description',
+                        rules: [{
+                            type: 'empty',
+                            prompt: 'Please enter question description'
+                        }]
+                    },
+                    input: {
+                        identifier: 'input',
+                        rules: [{
+                            type: 'empty',
+                            prompt: 'Please enter question input description'
+                        }]
+                    },
+                    output: {
+                        identifier: 'output',
+                        rules: [{
+                            type: 'empty',
+                            prompt: 'Please enter question output description'
+                        }]
+                    },
+                    sampleinput: {
+                        identifier: 'sampleinput',
+                        rules: [{
+                            type: 'empty',
+                            prompt: 'Please enter question sample input'
+                        }]
+                    },
+                    sampleoutput: {
+                        identifier: 'sampleoutput',
+                        rules: [{
+                            type: 'empty',
+                            prompt: 'Please enter question sample output'
+                        }]
                     }
-                });
+                }
+            });
         });
 </script>
 

@@ -181,7 +181,7 @@ func catalogueHandler(w http.ResponseWriter, r *http.Request) {
 		err := rows.Scan(&pbinfo.Pid, &pbinfo.Title, &pb.Description, &pb.Input, &pb.Output,
 			&pb.SampleInput, &pb.SampleOutput, &level)
 		if err != nil {
-			http.Error(w, http.StatusText(500), 500)
+			http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 			log.Println("func catalogueHandler query problem catalogue in SQL error -", err)
 			return
 		}
@@ -235,11 +235,6 @@ func catalogueHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tmpl.ExecuteTemplate(w, "catalogue.html", pbs)
-}
-
-func userInfoHandler(w http.ResponseWriter, r *http.Request) {
-	mem := getUser(w, r)
-	fmt.Fprintln(w, mem.ID)
 }
 
 func problemHandler(w http.ResponseWriter, r *http.Request) {
@@ -426,14 +421,15 @@ func newHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(r.FormValue("sample_input"))
 		fmt.Println(r.FormValue("sample_output"))
 	}
-	tmpl.ExecuteTemplate(w, "newproblem.html", nil)
+	tmpl.ExecuteTemplate(w, "dashboard.html", nil)
 }
 
 func editHandler(w http.ResponseWriter, r *http.Request) {
+	// get page or problem info
 	if r.Method == http.MethodGet {
 		pid := r.FormValue("pid")
 		if pid == "" {
-			tmpl.ExecuteTemplate(w, "editProblem.html", nil)
+			tmpl.ExecuteTemplate(w, "dashboard.html", nil)
 			return
 		}
 
@@ -464,6 +460,7 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, string(response))
 	}
 
+	// post form 
 	if r.Method == http.MethodPost {
 		pb := ProblemString{}
 		pb.Pid, _ = strconv.Atoi(r.FormValue("pid"))
@@ -483,6 +480,16 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		tmpl.ExecuteTemplate(w, "editProblem.html", nil)
+		tmpl.ExecuteTemplate(w, "dashboard.html", nil)
+	}
+}
+
+func dashHandler (w http.ResponseWriter, r *http.Request) {
+	if (r.FormValue("type") == "new") {
+		newHandler(w, r)
+	} else if (r.FormValue("type") == "edit") {
+		editHandler(w, r)
+	} else {
+		tmpl.ExecuteTemplate(w, "dashboard.html", nil)
 	}
 }

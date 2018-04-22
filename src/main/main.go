@@ -44,17 +44,20 @@ func main() {
 	log.SetOutput(logFile)
 
 	http.Handle("/", http.FileServer(http.Dir("../../view/")))
+
 	http.HandleFunc("/signup", signupHandler)
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/logout", logoutHandler)
 	http.HandleFunc("/catalogue", catalogueHandler)
 	http.HandleFunc("/status", statusHandler)
-	http.HandleFunc("/userinfo", userInfoHandler)
 	http.HandleFunc("/submit", submitHandler)
 	http.HandleFunc("/problem", problemHandler)
 	http.HandleFunc("/code", codeHandler)
-	http.HandleFunc("/newproblem", newHandler)
+	http.HandleFunc("/dashboard", dashHandler)
 	http.HandleFunc("/editproblem", editHandler)
-	
+
+	http.HandleFunc("/userinfo", getUserInfo)
+	http.HandleFunc("/pidcount", getPidCount)
+
 	log.Fatal(http.ListenAndServe(":9090", nil))
 }
