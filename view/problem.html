@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/container.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/grid.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/header.css">
-  <link rel="stylesheet" type="text/css" href="semantic/dist/components/menu.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/menu.min.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/divider.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/dropdown.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/segment.css">
@@ -25,93 +25,116 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/tab.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/input.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/dropdown.css">
-  <link rel="stylesheet" type="text/css" href="semantic/dist/components/table.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/table.min.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/form.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/message.css">
 
-  <link rel="stylesheet" href="assets/library/pages.css">
   <link rel="stylesheet" href="assets/codemirror/lib/codemirror.css">
   <link rel="stylesheet" href="assets/codemirror/theme/solarized.css">
+  <link rel="stylesheet" href="assets/library/pages.css">
 </head>
 
 <body>
   <!-- Page Contents -->
   <div class="ui inverted segment">
-    <div class="ui inverted menu">
-      <div class="coditheader">Co<span class="d">d</span>it</div>
-      <a class="item" href="catalogue">Problems</a>
-      <a class="item" href="status">Status</a>
-      <a class="item">Contest</a>
-      <a class="item">Discuss</a>
+    <div class="ui container">
+      <div class="ui inverted menu">
+        <a class="codit-header" href="/">
+          <img src="assets/images/Codit_nav.png" alt="nav" height="30px">
+        </a>
+        <a class="item">Explore</a>
+        <a class="item" href="catalogue">Problems</a>
+        <a class="item" href="status">Status</a>
+        <a class="item">Contest</a>
+        <a class="item">Aticles</a>
+        <a class="item">Discuss</a>
+      </div>
     </div>
   </div>
 
-
   <div class="ui container">
-    <h2 class>{{.Pid}}. {{.Title}}</h2>
+    <h2 id="problem-title">{{.Pid}}. {{.Title}}</h2>
   </div>
-  <br>
 
   <div class="ui container">
-    <div class="ui top attached tabular menu">
-      <div class="active item">Problem</div>
-      <div class="item">Note</div>
-      <div class="item">Statistic</div>
-      <div class="item">Discuss</div>
+    <div class="ui huge tabular menu">
+      <a class="active item">
+        <i class="pencil alternate icon"></i> Problem</a>
+      <a class="item">
+        <i class="lightbulb outline icon"></i>Hints</a>
+      <a class="item">
+        <i class="code icon"></i> Submissions</a>
+      <a class="item">
+        <i class="comments icon"></i> Discuss</a>
+      <a class="item">
+        <i class="flask icon"></i> Solutions</a>
     </div>
-    <div class="ui bottom attached active tab segment">
-      <div class="ui stackable grid">
-        <div class="twelve wide column">
-          <h3>Description</h3>
-          <p>{{.Description}}</p>
-          <h3>Input</h3>
-          <p>{{.Input}}</p>
-          <h3>Output</h3>
-          <p>{{.Output}}</p>
-          <h3>Sample Input</h3>
-          <div class="samplebg">
-            <p class="sample">{{.SampleInput}}</p>
-          </div>
-          <h3>Sample Output</h3>
-          <div class="samplebg">
-            <p class="sample">{{.SampleOutput}}</p>
-          </div>
-          <br>
-          <form class="ui form" method="post" action="/submit">
-            <select class="ui selection dropdown" name="compiler">
-              <option value="">Select Compiler</option>
-              <option value="c">C</option>
-              <option value="cpp">C++</option>
-              <option value="java">Java</option>
-            </select>
-            <textarea id="editor" name="code"></textarea>
-            <div class="ui container">
-              <div class="ui error message"></div>
-              <input type="submit" value="Submit" class="ui secondary small button" />
-            </div>
-          </form>
-        </div>
-        <div class="ui grid">
-          <div class="right floated three wide column">
-            <br>
-            <br>
-            <table style="text-align:center; border: 1px, solid">
-              <tr class="neginfo">
-                <td>Time&nbsp;Limited</td>
-              </tr>
-              <tr class="posinfo">
-                <td>100&nbsp;ms</td>
-              </tr>
-              <tr class="neginfo">
-                <td>Memory&nbsp;Limit</td>
-              </tr>
-              <tr class="posinfo">
-                <td>65536&nbsp;kB</td>
-              </tr>
-            </table>
-          </div>
-        </div>
 
+    <div class="ui stackable grid">
+      <div class="twelve wide column">
+        <h3>Description</h3>
+        <p>{{.Description}}</p>
+        <h3>Input</h3>
+        <p>{{.Input}}</p>
+        <h3>Output</h3>
+        <p>{{.Output}}</p>
+        <h3>Sample Input</h3>
+        <div class="samplebg">
+          <p class="sample">{{.SampleInput}}</p>
+        </div>
+        <h3>Sample Output</h3>
+        <div class="samplebg">
+          <p class="sample">{{.SampleOutput}}</p>
+        </div>
+        <br>
+        <form id="code-submit" class="ui form" method="post" action="/submit">
+          <select class="ui selection dropdown" name="compiler">
+            <option value="">Select Compiler</option>
+            <option value="c">C</option>
+            <option value="cpp">C++</option>
+            <option value="java">Java</option>
+          </select>
+          <textarea id="editor" name="code"></textarea>
+          <div class="ui container">
+            <div class="ui error message"></div>
+            <input type="submit" value="Submit" class="ui secondary small button" />
+          </div>
+        </form>
+      </div>
+
+      <div class="four wide column">
+        <table class="ui very basic table">
+          <tbody>
+            <tr class="neg-bg">
+              <td style="padding-left: 1em">Difficulty:</td>
+              <td class="right aligned" style="padding-right: 1em">{{}}</td>
+            </tr>
+            <tr>
+              <td style="padding-left: 1em">Total Submissions:</td>
+              <td class="right aligned" style="padding-right: 1em">{{}}</td>
+            </tr>
+            <tr class="neg-bg">
+              <td style="padding-left: 1em">Total Submissions:</td>
+              <td class="right aligned" style="padding-right: 1em">{{}}</td>
+            </tr>
+            <tr>
+              <td style="padding-left: 1em">Contributor:</td>
+              <td class="right aligned" style="padding-right: 1em">{{}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="row">
+          <div class="ui dropdown p-drop">
+            <div class="text">Related Topics</div>
+            <i class="dropdown icon"></i>
+          </div>
+        </div>
+        <div class="row">
+          <div class="ui dropdown p-drop">
+            <div class="text">Similar Questions</div>
+            <i class="dropdown icon"></i>
+          </div>
+        </div>
       </div>
     </div>
   </div>

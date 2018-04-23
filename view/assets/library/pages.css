@@ -1,14 +1,5 @@
-.coditheader {
-  font-size: 1.7em;
-  color: whitesmoke;
-  margin-top: 0.4em;
-  padding-left: 3.5em;
-  padding-right: 2em;
-}
-
-.d {
-  color: #fbcf61;
-  font-weight: bold
+.codit-header {
+  margin-right: 1em;
 }
 
 hr.style-two {
@@ -28,14 +19,8 @@ hr.style-two {
   padding: 10px 0px 10px 10px;
 }
 
-.posinfo {
-  text-align: center;
-}
-
-.neginfo {
-  text-align: center;
-  width: 300px;
-  background-color: rgb(238, 238, 238);
+.neg-bg {
+  background-color: whitesmoke;
 }
 
 .ui.inverted.segment {
@@ -68,4 +53,19 @@ hr.style-two {
 .CodeMirror {
   margin-top: 1em;
   margin-bottom: 2em;
+}
+
+#problem-title {
+  margin-bottom: 1em;
+}
+
+#code-submit {
+  margin-top: 1em;
+}
+
+.p-drop {
+  padding-left: 1em;
+  padding-top: 2em;
+  font-weight: bold;
+  color: #08c;
 }

@@ -27,12 +27,18 @@
 <body>
   <!-- Page Contents -->
   <div class="ui inverted segment">
-    <div class="ui inverted menu">
-      <div class="coditheader">Co<span class="d">d</span>it</div>
-      <a class="item" href="catalogue">Problems</a>
-      <a class="item">Status</a>
-      <a class="item">Contest</a>
-      <a class="item">Discuss</a>
+    <div class="ui container">
+      <div class="ui inverted menu">
+        <a class="codit-header" href="/">
+          <img src="assets/images/Codit_nav.png" alt="nav" height="30px">
+        </a>
+        <a class="item">Explore</a>
+        <a class="item" href="catalogue">Problems</a>
+        <a class="item" href="status">Status</a>
+        <a class="item">Contest</a>
+        <a class="item">Aticles</a>
+        <a class="item">Discuss</a>
+      </div>
     </div>
   </div>
 
@@ -57,13 +63,18 @@
           <th>{{.Username}}</th>
           <th>{{.Problem}}</th>
           {{if .Language0}}
-          <th><a href="">C</a></th>
+          <th>
+            <a href="">C</a>
+          </th>
           {{else if .Language1}}
-          <th><a href="">C++</a></th>
+          <th>
+            <a href="">C++</a>
+          </th>
           {{else if .Language2}}
-          <th><a href="">Java</a></th>
-          {{end}}
-          {{if .Result0}}
+          <th>
+            <a href="">Java</a>
+          </th>
+          {{end}} {{if .Result0}}
           <th style="color:blue">Pending</th>
           {{else if .Result1}}
           <th style="color:red">Accept</th>
@@ -119,14 +130,15 @@
   </div>
 </body>
 
-  <script src="assets/library/jquery.min.js"></script>
-  <script src="semantic/dist/components/visibility.js"></script>
-  <script src="semantic/dist/components/sidebar.js"></script>
-  <script src="semantic/dist/components/transition.js"></script>
-  <script src="assets/library/tablesort.js"></script>
-  
-  <script>
-    $(document)
-      .ready(function () {});
-  </script>
+<script src="assets/library/jquery.min.js"></script>
+<script src="semantic/dist/components/visibility.js"></script>
+<script src="semantic/dist/components/sidebar.js"></script>
+<script src="semantic/dist/components/transition.js"></script>
+<script src="assets/library/tablesort.js"></script>
+
+<script>
+  $(document)
+    .ready(function () {});
+</script>
+
 </html>
