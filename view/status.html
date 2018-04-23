@@ -59,45 +59,45 @@
       <tbody>
         {{range .}}
         <tr>
-          <th>{{.RID}}</th>
-          <th>{{.Username}}</th>
-          <th>{{.Problem}}</th>
+          <td>{{.RID}}</td>
+          <td>{{.Username}}</td>
+          <td>{{.Problem}}</td>
           {{if .Language0}}
-          <th>
+          <td>
             <a href="">C</a>
-          </th>
+          </td>
           {{else if .Language1}}
-          <th>
+          <td>
             <a href="">C++</a>
-          </th>
+          </td>
           {{else if .Language2}}
-          <th>
+          <td>
             <a href="">Java</a>
-          </th>
+          </td>
           {{end}} {{if .Result0}}
-          <th style="color:blue">Pending</th>
+          <td style="color:blue">Pending</td>
           {{else if .Result1}}
-          <th style="color:red">Accept</th>
+          <td style="color:red">Accept</td>
           {{else if .Result2}}
-          <th style="color:green">Wrong Answer</th>
+          <td style="color:green">Wrong Answer</td>
           {{else if .Result3}}
-          <th style="color:green">Compile Error</th>
+          <td style="color:green">Compile Error</td>
           {{else if .Result4}}
-          <th style="color:green">Runtime Error</th>
+          <td style="color:green">Runtime Error</td>
           {{else if .Result5}}
-          <th style="color:green">Time Limit Exceeded</th>
+          <td style="color:green">Time Limit Exceeded</td>
           {{else if .Result6}}
-          <th style="color:green">Memory Limit Exceeded</th>
+          <td style="color:green">Memory Limit Exceeded</td>
           {{else if .Result7}}
-          <th style="color:green">Output Limit Exceeded</th>
+          <td style="color:green">Output Limit Exceeded</td>
           {{else if .Result8}}
-          <th style="color:yellow">Presentation Error</th>
+          <td style="color:yellow">Presentation Error</td>
           {{else if .Result9}}
-          <th style="color:blue">System Error</th>
+          <td style="color:blue">System Error</td>
           {{end}}
-          <th>{{.RunTime}}ms</th>
-          <th>{{.Memory}}KB</th>
-          <th>{{.SubmitTime}}</th>
+          <td>{{.RunTime}}ms</td>
+          <td>{{.Memory}}KB</td>
+          <td>{{.SubmitTime}}</td>
         </tr>
         {{end}}
       </tbody>
@@ -108,7 +108,6 @@
   <div class="ui inverted vertical footer">
     <div class="ui container">
       <hr class="style-two">
-      <br>
       <div class="ui stackable inverted divided equal height stackable grid">
         <div class="three wide column text-center">
           <p>Copyright &copy; 2018&ensp; Codit</p>
@@ -126,7 +125,6 @@
         </div>
       </div>
     </div>
-    <br>
   </div>
 </body>
 
