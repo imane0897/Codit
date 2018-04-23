@@ -26,6 +26,8 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/input.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/dropdown.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/table.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/form.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/message.css">
 
   <link rel="stylesheet" href="assets/library/pages.css">
   <link rel="stylesheet" href="assets/codemirror/lib/codemirror.css">
@@ -36,8 +38,7 @@
   <!-- Page Contents -->
   <div class="ui inverted segment">
     <div class="ui inverted menu">
-      <div class="coditheader">Co
-        <span class="d">d</span>it</div>
+      <div class="coditheader">Co<span class="d">d</span>it</div>
       <a class="item" href="catalogue">Problems</a>
       <a class="item" href="status">Status</a>
       <a class="item">Contest</a>
@@ -76,21 +77,17 @@
             <p class="sample">{{.SampleOutput}}</p>
           </div>
           <br>
-          <form method="post" action="/submit">
+          <form class="ui form" method="post" action="/submit">
             <select class="ui selection dropdown" name="compiler">
               <option value="">Select Compiler</option>
               <option value="c">C</option>
               <option value="cpp">C++</option>
               <option value="java">Java</option>
             </select>
-            <br>
-            <br>
             <textarea id="editor" name="code"></textarea>
-            <br>
             <div class="ui container">
-              <div class="right item">
-                <input type="submit" value="Submit" class="ui secondary small button" />
-              </div>
+              <div class="ui error message"></div>
+              <input type="submit" value="Submit" class="ui secondary small button" />
             </div>
           </form>
         </div>
@@ -147,6 +144,7 @@
 
 <script src="assets/library/jquery.min.js"></script>
 <script src="semantic/dist/components/tab.js"></script>
+<script src="semantic/dist/components/form.js"></script>
 <script src="semantic/dist/components/dropdown.js"></script>
 <script src="semantic/dist/components/transition.js"></script>
 <script src="assets/codemirror/lib/codemirror.js"></script>
@@ -162,25 +160,43 @@
         value: "put your code here"
       });
 
-      $('.ui.selection.dropdown')
-        .dropdown({
-          onChange: function () {
-            var lan = $('.ui.dropdown')
-              .dropdown('get value');
-            if (lan == "c") {
-              myCodeMirror.getDoc().setValue(
-                "#include <stdio.h> \nint main(void) {\n\tprintf(\"Hello World!\\n\");\n\treturn 0;\n}");
-            } else if (lan == "cpp") {
-              myCodeMirror.getDoc().setValue(
-                "#include <iostream>\nusing namespace std;\nint main() {\n\tcout << \"Hello World!\" << endl;\n\treturn 0;\n}"
-              );
-            } else if (lan == "java") {
-              myCodeMirror.getDoc().setValue(
-                "class myjavaprog \n{\n\tpublic static void main(String args[])\n\t{\n\tSystem.out.println(\"Hello World!\");\n\t}\n}"
-              );
-            }
+      $('.ui.selection.dropdown').dropdown({
+        onChange: function () {
+          var lan = $('.ui.dropdown')
+            .dropdown('get value');
+          if (lan == "c") {
+            myCodeMirror.getDoc().setValue(
+              "#include <stdio.h> \nint main(void) {\n\tprintf(\"Hello World!\\n\");\n\treturn 0;\n}");
+          } else if (lan == "cpp") {
+            myCodeMirror.getDoc().setValue(
+              "#include <iostream>\nusing namespace std;\nint main() {\n\tcout << \"Hello World!\" << endl;\n\treturn 0;\n}"
+            );
+          } else if (lan == "java") {
+            myCodeMirror.getDoc().setValue(
+              "class myjavaprog \n{\n\tpublic static void main(String args[])\n\t{\n\tSystem.out.println(\"Hello World!\");\n\t}\n}"
+            );
           }
-        });
+        }
+      });
+
+      $('.ui.form').form({
+        fields: {
+          compiler: {
+            identifier: 'compiler',
+            rules: [{
+              type: 'empty',
+              prompt: 'Please select a compiler'
+            }]
+          },
+          code: {
+            identifier: 'code',
+            rules: [{
+              type: 'empty',
+              prompt: 'Code area cannot be empty'
+            }]
+          }
+        }
+      });
     });
 </script>
 

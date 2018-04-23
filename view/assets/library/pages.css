@@ -40,7 +40,7 @@ hr.style-two {
 
 .ui.inverted.segment {
   border-radius: 0px;
-  margin-bottom: 5em;
+  margin-bottom: 4em;
 }
 
 .ui.inverted.vertical.footer {
@@ -63,4 +63,9 @@ hr.style-two {
 
 .ui.fluid.primary.button {
   margin-bottom: 1em;
+}
+
+.CodeMirror {
+  margin-top: 1em;
+  margin-bottom: 2em;
 }
