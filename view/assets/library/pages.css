@@ -1,3 +1,7 @@
+.main-header.ui.inverted.segment {
+  margin-bottom: 4em;
+}
+
 .codit-header {
   margin-right: 1em;
 }
@@ -26,7 +30,6 @@ hr.style-two {
 
 .ui.inverted.segment {
   border-radius: 0px;
-  margin-bottom: 4em;
 }
 
 .ui.inverted.vertical.footer {
