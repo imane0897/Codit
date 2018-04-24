@@ -259,11 +259,11 @@ func problemHandler(w http.ResponseWriter, r *http.Request) {
 	switch {
 	case err == sql.ErrNoRows:
 		http.NotFound(w, r)
-		log.Println("func problemHandler error - problem ", pid, " not found")
+		log.Println("func problemHandler problem ", pid, " not found - ", err)
 		return
 	case err != nil:
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
-		log.Println("func problemHandler error - problem ", pid, " query error")
+		log.Println("func problemHandler - problem ", pid, " query error - ", err)
 		return
 	}
 	pb.Description = template.HTML(description)
@@ -271,6 +271,21 @@ func problemHandler(w http.ResponseWriter, r *http.Request) {
 	pb.Output = template.HTML(output)
 	pb.SampleInput = template.HTML(sampleInput)
 	pb.SampleOutput = template.HTML(sampleOutput)
+
+	row = db.QueryRow("SELECT count(*) FROM submissions WHERE problem = $1 and result = 1", pb.Pid)
+	err = row.Scan(&pb.Accepted)
+	if err != nil {
+		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+		log.Println("func problemHandler get total accepted error -", err)
+		return
+	}
+	row = db.QueryRow("SELECT count(*) FROM submissions WHERE problem = $1", pb.Pid)
+	err = row.Scan(&pb.Submissions)
+	if err != nil {
+		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+		log.Println("func problemHandler get total submissions error -", err)
+		return
+	}
 
 	tmpl.ExecuteTemplate(w, "problem.html", pb)
 }

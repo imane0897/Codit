@@ -100,6 +100,8 @@ type Problem struct {
 	SampleInput  template.HTML
 	SampleOutput template.HTML
 	Level        int
+	Accepted     int
+	Submissions  int
 }
 
 // ProblemInfo has the info for table in catalogue.html

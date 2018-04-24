@@ -33,3 +33,12 @@ func getPidCount(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Fprint(w, count)
 }
+
+func getProblemInfo(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
+		return
+	}
+
+	
+}
