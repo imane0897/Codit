@@ -18,6 +18,7 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/transition.min.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/table.min.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/dropdown.min.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/icon.min.css">
   <link rel="stylesheet" href="assets/library/pages.css">
 </head>
 
@@ -147,4 +148,16 @@
 </body>
 
 <script src="assets/library/jquery.min.js"></script>
+<script src="semantic/dist/components/transition.min.js"></script>
+<script src="semantic/dist/components/dropdown.min.js"></script>
+<script>
+  $(document)
+    .ready(function () {
+      $('.ui.dropdown').dropdown();
+
+      $.get('/userinfo', function (data) {
+        $('#username').after(data);
+      });
+    });
+</script>
 </html>
