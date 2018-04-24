@@ -23,7 +23,7 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/list.min.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/transition.min.css">
 
-  <link rel="stylesheet" type="text/css" href="assets/library/main.css">
+  <link rel="stylesheet" type="text/css" href="assets/library/index.css">
   <link rel="stylesheet" type="text/css" href="assets/library/pages.css">
   <link rel="stylesheet" type="text/css" href="assets/library/devices.css">
 
@@ -89,13 +89,13 @@
                     <span class="cyancode">&gt;</span>
                     <br>
                     <span class="violetcode">int</span>
-                    <span class="bluecode">&nbsp;main</span>(
-                    <span class="violetcode">void</span>)&nbsp;{
+                    <span class="bluecode">main</span>&nbsp;(
+                    <span class="violetcode">void</span>&nbsp;)&nbsp;{
                     <br>
                     <span class="bluecode">&emsp;&emsp;&emsp;&emsp;printf</span>(
                     <span class="cyancode">"</span>
                     <span class="greencode">Hello World!</span>
-                    <span class="cyancode">\n"</span>)
+                    <span class="cyancode">\n"</span>&nbsp;)
                     <span class="cyancode">;</span>
                     <br>
                     <span class="violetcode">&emsp;&emsp;&emsp;&emsp;return
@@ -161,27 +161,27 @@
 </body>
 
 <script src="assets/library/jquery.min.js"></script>
-  <script src="semantic/dist/components/visibility.min.js"></script>
-  <script src="semantic/dist/components/sidebar.min.js"></script>
-  <script src="semantic/dist/components/transition.min.js"></script>
+<script src="semantic/dist/components/visibility.min.js"></script>
+<script src="semantic/dist/components/sidebar.min.js"></script>
+<script src="semantic/dist/components/transition.min.js"></script>
 
-  <script>
-    $(document)
-      .ready(function () {
+<script>
+  $(document)
+    .ready(function () {
 
-        // fix menu when passed
-        $('.masthead')
-          .visibility({
-            once: false,
-            onBottomPassed: function () {
-              $('.fixed.menu').transition('fade in');
-            },
-            onBottomPassedReverse: function () {
-              $('.fixed.menu').transition('fade out');
-            }
-          });
+      // fix menu when passed
+      $('.masthead')
+        .visibility({
+          once: false,
+          onBottomPassed: function () {
+            $('.fixed.menu').transition('fade in');
+          },
+          onBottomPassedReverse: function () {
+            $('.fixed.menu').transition('fade out');
+          }
+        });
 
-      });
+    });
+</script>
 
-  </script>
 </html>
