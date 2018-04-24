@@ -67,10 +67,10 @@ hr.style-two {
   margin-top: 1em;
 }
 
-.slight-right {
+td.slight-right {
   padding-left: 1em !important;
 }
 
-.slight-left {
+td.right.aligned.slight-left {
   padding-right: 1em !important;
 }

@@ -163,7 +163,7 @@ func catalogueHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rows, err := db.Query("SELECT * FROM problems ORDER BY pid ASC")
+	rows, err := db.Query("SELECT pid, title, level FROM problems ORDER BY pid ASC")
 	if err != nil {
 		http.Error(w, http.StatusText(500), 500)
 		log.Println("func catalogueHandler cannot query problem catalogue in SQL -", err)
@@ -172,14 +172,13 @@ func catalogueHandler(w http.ResponseWriter, r *http.Request) {
 	defer rows.Close()
 
 	pbs := make([]ProblemInfo, 0)
+	mem := getUser(w, r)
 	for rows.Next() {
-		pb := Problem{}
 		pbinfo := ProblemInfo{}
 
-		// check Pid, Title, Level
+		// get Pid, Title, Level
 		var level int
-		err := rows.Scan(&pbinfo.Pid, &pbinfo.Title, &pb.Description, &pb.Input, &pb.Output,
-			&pb.SampleInput, &pb.SampleOutput, &level)
+		err := rows.Scan(&pbinfo.Pid, &pbinfo.Title, &level)
 		if err != nil {
 			http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 			log.Println("func catalogueHandler query problem catalogue in SQL error -", err)
@@ -219,12 +218,14 @@ func catalogueHandler(w http.ResponseWriter, r *http.Request) {
 			pbinfo.Acceptance += "%"
 		}
 
-		// check State
-		var rid int
-		mem := getUser(w, r)
-		row = db.QueryRow("SELECT rid FROM submissions WHERE problem = $1 and result = 1 and username = $2", pbinfo.Pid, mem.ID)
-		if row.Scan(&rid) == nil {
-			pbinfo.State = true
+		// get State
+		pbinfo.State = false
+		if mem.ID != "" {
+			var rid int
+			row = db.QueryRow("SELECT rid FROM submissions WHERE problem = $1 and result = 1 and username = $2", pbinfo.Pid, mem.ID)
+			if row.Scan(&rid) == nil {
+				pbinfo.State = true
+			}
 		}
 
 		pbs = append(pbs, pbinfo)

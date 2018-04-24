@@ -128,10 +128,10 @@
           <tbody>
             <tr class="neg-bg">
               <td class="slight-right">Difficulty:</td>
-              <td class="right aligned slight-left"></td>
+              <td class="right aligned slight-left">{{.Level}}</td>
             </tr>
             <tr>
-              <td class="slight-right">Total Submissions:</td>
+              <td class="slight-right">Total Accepted:</td>
               <td class="right aligned slight-left"></td>
             </tr>
             <tr class="neg-bg">
@@ -179,55 +179,6 @@
 <script src="semantic/dist/components/transition.js"></script>
 <script src="assets/codemirror/lib/codemirror.js"></script>
 <script src="assets/codemirror/mode/cmake/cmake.js"></script>
-
-<script>
-  $(document)
-    .ready(function () {
-      var myCodeMirror = CodeMirror.fromTextArea(document.getElementById("editor"), {
-        mode: "cmake",
-        theme: "solarized",
-        lineNumbers: true,
-        value: "put your code here"
-      });
-
-      $('.ui.selection.dropdown').dropdown({
-        onChange: function () {
-          var lan = $('.ui.dropdown')
-            .dropdown('get value');
-          if (lan == "c") {
-            myCodeMirror.getDoc().setValue(
-              "#include <stdio.h> \nint main(void) {\n\tprintf(\"Hello World!\\n\");\n\treturn 0;\n}");
-          } else if (lan == "cpp") {
-            myCodeMirror.getDoc().setValue(
-              "#include <iostream>\nusing namespace std;\nint main() {\n\tcout << \"Hello World!\" << endl;\n\treturn 0;\n}"
-            );
-          } else if (lan == "java") {
-            myCodeMirror.getDoc().setValue(
-              "class myjavaprog \n{\n\tpublic static void main(String args[])\n\t{\n\tSystem.out.println(\"Hello World!\");\n\t}\n}"
-            );
-          }
-        }
-      });
-
-      $('.ui.form').form({
-        fields: {
-          compiler: {
-            identifier: 'compiler',
-            rules: [{
-              type: 'empty',
-              prompt: 'Please select a compiler'
-            }]
-          },
-          code: {
-            identifier: 'code',
-            rules: [{
-              type: 'empty',
-              prompt: 'Code area cannot be empty'
-            }]
-          }
-        }
-      });
-    });
-</script>
+<script src="assets/library/problem.js"></script>
 
 </html>
