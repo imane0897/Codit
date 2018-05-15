@@ -15,7 +15,7 @@ func init() {
 	tmpl = template.Must(template.ParseGlob("../../view/*.html"))
 
 	// connect to database
-	db, err = sql.Open("postgres", "postgres://root:password@localhost/codit?sslmode=disable")
+	db, err = sql.Open("postgres", "postgres://aym:password@localhost/codit?sslmode=disable")
 	if err != nil {
 		log.Println("database open error: ", err)
 	}
@@ -26,7 +26,7 @@ func init() {
 		log.Println("Connected to the database")
 	}
 
-	// init variables
+	// init global variable rid
 	row := db.QueryRow("SELECT rid FROM submissions ORDER BY rid DESC LIMIT 1")
 	err = row.Scan(&rid)
 	if err != nil {
@@ -60,5 +60,5 @@ func main() {
 	http.HandleFunc("/userinfo", getUserInfo)
 	http.HandleFunc("/pidcount", getPidCount)
 
-	log.Fatal(http.ListenAndServe(":9090", nil))
+	log.Fatal(http.ListenAndServe(":9090l", nil))
 }
