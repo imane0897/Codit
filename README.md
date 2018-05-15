@@ -17,13 +17,15 @@ $ sudo apt-get install postgresql postgresql-contrib
 
     The installation procedure created a user account called postgres that is associated with the default Postgres role. In order to use Postgres, we can log into that account.
 ```
+// backup old database
+pg_dump -U username -h hostname -p port databasename -f filename
 // Switch over to the postgres account on your server by typing
 $ sudo -i -u postgres
 // new database in target sever
 $ createdb -T template0 dbname
-// add user
-dbname=# create role root with login password 'string';
-//
+// add user (in psql)
+create role root with login password 'string';
+// configure db with dump file
 $ psql -U username -h hostname -d desintationdb -p port -f filename
 // grant
 dbname=# GRANT ALL PRIVILEGES ON TABLE tablename to rolename;
