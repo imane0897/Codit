@@ -2,27 +2,29 @@ package main
 
 import (
 	"database/sql"
-	"github.com/satori/go.uuid"
 	"net/http"
 	"time"
 	"log"
+	
+	"github.com/satori/go.uuid"
+	"github.com/valyala/fasthttp"	
 )
 
-func getUser(w http.ResponseWriter, r *http.Request) Member {
+func getUser(ctx *fasthttp.RequestCtx) Member {
 	// get cookie
-	c, err := r.Cookie("session")
+	c, err := ctx.Request.Header.Cookie("session")
 	if err != nil {
 		sID, err := uuid.NewV4()
 		if err != nil {
-			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			ctx.Error("Internal server error", http.StatusInternalServerError)
 			log.Println("func getUser error: cannot get cookie session")
 		}
-		c = &http.Cookie{
-			Name:  "session",
-			Value: sID.String(),
+		c = &fasthttp.Cookie{
+			key:  "session",
+			value: sID.String(),
 		}
 	}
-	http.SetCookie(w, c)
+	ctx.Response.Header.SetCookie(c)
 
 	// if the user exists already, get user
 	var s Session
@@ -32,21 +34,21 @@ func getUser(w http.ResponseWriter, r *http.Request) Member {
 	if err != sql.ErrNoRows {
 		_, err = db.Exec("UPDATE sessions SET last_activity = $1 where uuid = $2", time.Now(), s.uuid)
 		if err != nil {
-			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			ctx.Error("Internal server error", http.StatusInternalServerError)
 			log.Println("func getUser error: sql error")
 		}
 		row = db.QueryRow("SELECT * FROM members WHERE id = $1", s.username)
 		err = row.Scan(&mem.ID, &mem.Password, &mem.Admin)
 		if err != nil {
-			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			ctx.Error("Internal server error", http.StatusInternalServerError)
 			log.Println("func getUser error: cannot get user info")
 		}
 	}
 	return mem
 }
 
-func alreadyLoggedIn(w http.ResponseWriter, r *http.Request) bool {
-	c, err := r.Cookie("session")
+func alreadyLoggedIn(ctx *fasthttp.RequestCtx) bool {
+	c, err := ctx.Request.Header.Cookie("session")
 	if err != nil {
 		return false
 	}
@@ -65,7 +67,7 @@ func alreadyLoggedIn(w http.ResponseWriter, r *http.Request) bool {
 	return false
 }
 
-func isAdmin(w http.ResponseWriter, r *http.Request) bool{
+func isAdmin(ctx *fasthttp.RequestCtx) bool{
 	mem := getUser(w, r)
 	if mem.Admin == true {
 		return true

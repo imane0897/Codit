@@ -4,10 +4,12 @@ import (
 	"database/sql"
 	"html/template"
 	"log"
-	"net/http"
+	// "net/http"
 	"os"
 
 	_ "github.com/lib/pq"
+	// "github.com/buaazp/fasthttprouter"
+	"github.com/valyala/fasthttp"
 )
 
 func init() {
@@ -43,22 +45,23 @@ func main() {
 	defer logFile.Close()
 	log.SetOutput(logFile)
 
-	http.Handle("/", http.FileServer(http.Dir("../../view/")))
+	router := fasthttprouter.New()
+	router.ServeFiles("/view/*filepath", "../../")
+	router.GET("/signup", signupHandler)
+	router.GET("/login", loginHandler)
+	router.GET("/logout", logoutHandler)
+	router.GET("/catalogue", catalogueHandler)
+	router.GET("/status", statusHandler)
+	router.GET("/submit", submitHandler)
+	router.GET("/problem", problemHandler)
+	router.GET("/code", codeHandler)
+	router.GET("/dashboard", dashHandler)
+	router.GET("/editproblem", editHandler)
+	router.POST("/newproblem", newHandler)
+	router.GET("/userinfo", getUserInfo)
+	router.GET("/pidcount", getPidCount)
+	router.POST("/signup", signupPostHandler)
+	router.POST("/login", loginPostHandler)
 
-	http.HandleFunc("/signup", signupHandler)
-	http.HandleFunc("/login", loginHandler)
-	http.HandleFunc("/logout", logoutHandler)
-	http.HandleFunc("/catalogue", catalogueHandler)
-	http.HandleFunc("/status", statusHandler)
-	http.HandleFunc("/submit", submitHandler)
-	http.HandleFunc("/problem", problemHandler)
-	http.HandleFunc("/code", codeHandler)
-	http.HandleFunc("/dashboard", dashHandler)
-	http.HandleFunc("/editproblem", editHandler)
-	http.HandleFunc("/newproblem", newHandler)
-
-	http.HandleFunc("/userinfo", getUserInfo)
-	http.HandleFunc("/pidcount", getPidCount)
-
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(fasthttp.ListenAndServe(":9090", router.Handler))
 }
