@@ -7,8 +7,8 @@ import (
 	// "net/http"
 	"os"
 
+	"github.com/buaazp/fasthttprouter"
 	_ "github.com/lib/pq"
-	// "github.com/buaazp/fasthttprouter"
 	"github.com/valyala/fasthttp"
 )
 
@@ -46,22 +46,22 @@ func main() {
 	log.SetOutput(logFile)
 
 	router := fasthttprouter.New()
-	router.ServeFiles("/view/*filepath", "../../")
+	router.ServeFiles("/view/*filepath", "/Users/aym/Documents/Codit/view")
+	router.GET("/", homeHandler)
 	router.GET("/signup", signupHandler)
+	router.POST("/signup", signupPostHandler)
 	router.GET("/login", loginHandler)
+	router.POST("/login", loginPostHandler)
 	router.GET("/logout", logoutHandler)
 	router.GET("/catalogue", catalogueHandler)
 	router.GET("/status", statusHandler)
-	router.GET("/submit", submitHandler)
+	// router.GET("/submit", submitHandler)
 	router.GET("/problem", problemHandler)
-	router.GET("/code", codeHandler)
 	router.GET("/dashboard", dashHandler)
 	router.GET("/editproblem", editHandler)
-	router.POST("/newproblem", newHandler)
+	// router.POST("/newproblem", newHandler)
 	router.GET("/userinfo", getUserInfo)
 	router.GET("/pidcount", getPidCount)
-	router.POST("/signup", signupPostHandler)
-	router.POST("/login", loginPostHandler)
 
 	log.Fatal(fasthttp.ListenAndServe(":9090", router.Handler))
 }

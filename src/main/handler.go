@@ -1,16 +1,22 @@
 package main
 
 import (
+
+	// "encoding/json"
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"html/template"
+	_ "html/template"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
 	"sync/atomic"
 	"time"
+	// "net/http"
+	// "os"
+	// "sync/atomic"
+	// "time"
 
 	_ "github.com/lib/pq"
 	"github.com/satori/go.uuid"
@@ -21,9 +27,11 @@ import (
 func homeHandler(ctx *fasthttp.RequestCtx) {
 	mem := getUser(ctx)
 	if mem.ID == "" {
+		ctx.SetContentType("text/html; charset=utf-8")
 		tmpl.ExecuteTemplate(ctx, "index.html", nil)
 	} else {
-		tmpl.ExecuteTemplate(ctx, "catalogue.html", nil)
+		ctx.SetContentType("text/html; charset=utf-8")
+		ctx.Redirect("/catalogue", http.StatusSeeOther)
 	}
 }
 
@@ -33,6 +41,7 @@ func signupHandler(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
+	ctx.SetContentType("text/html; charset=utf-8")
 	tmpl.ExecuteTemplate(ctx, "signup.html", nil)
 }
 
@@ -56,8 +65,9 @@ func signupPostHandler(ctx *fasthttp.RequestCtx) {
 	c.SetKey("session")
 	c.SetValue(sID.String())
 	ctx.Response.Header.SetCookie(&c)
+
 	_, err = db.Exec("INSERT INTO sessions (uuid, username, last_activity) VALUES ($1, $2, $3)",
-		c.Value, un, time.Now())
+		sID.String(), un, time.Now())
 	if err != nil {
 		ctx.Error("Internal server error", fasthttp.StatusInternalServerError)
 		return
@@ -76,17 +86,19 @@ func signupPostHandler(ctx *fasthttp.RequestCtx) {
 	}
 
 	// redirect
-	user.ID = un
+	user.ID = string(un)
 	ctx.Redirect("/catalogue", http.StatusSeeOther)
 	log.Println(user.ID + " signed up successfully")
 }
 
 func loginHandler(ctx *fasthttp.RequestCtx) {
 	if alreadyLoggedIn(ctx) {
+		ctx.SetContentType("text/html; charset=utf-8")
 		ctx.Redirect("/catalogue", http.StatusSeeOther)
 		return
 	}
 
+	ctx.SetContentType("text/html; charset=utf-8")
 	tmpl.ExecuteTemplate(ctx, "login.html", nil)
 }
 
@@ -117,7 +129,8 @@ func loginPostHandler(ctx *fasthttp.RequestCtx) {
 	c.SetValue(sID.String())
 	ctx.Response.Header.SetCookie(&c)
 	_, err = db.Exec("INSERT INTO sessions (uuid, username, last_activity) VALUES ($1, $2, $3)",
-		c.Value, un, time.Now())
+		sID.String(), un, time.Now())
+
 	if err != nil {
 		ctx.Error(http.StatusText(500), http.StatusInternalServerError)
 		return
@@ -136,21 +149,20 @@ func logoutHandler(ctx *fasthttp.RequestCtx) {
 	c := ctx.Request.Header.Cookie("session")
 
 	// delete the session
-	_, err := db.Exec("DELETE FROM sessions WHERE uuid = $1", c.Value)
+	_, err := db.Exec("DELETE FROM sessions WHERE uuid = $1", c)
 	if err != nil {
 		ctx.Error(http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
 
 	// remove the cookie
-	var c fasthttp.Cookie
-	c.SetKey("session")
-	c.SetValue("")
-	c.SetExpire(CookieExpireDelete)
-	ctx.Response.Header.SetCookie(&c)
+	var expiredCookie fasthttp.Cookie
+	expiredCookie.SetKey("session")
+	expiredCookie.SetValue("")
+	expiredCookie.SetExpire(fasthttp.CookieExpireDelete)
+	ctx.Response.Header.SetCookie(&expiredCookie)
 
 	ctx.Redirect("/login", http.StatusSeeOther)
-	log.Println("logged out" + c.Value)
 }
 
 func catalogueHandler(ctx *fasthttp.RequestCtx) {
@@ -226,6 +238,7 @@ func catalogueHandler(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
+	ctx.SetContentType("text/html; charset=utf-8")
 	tmpl.ExecuteTemplate(ctx, "catalogue.html", pbs)
 }
 
@@ -479,13 +492,4 @@ func dashHandler(ctx *fasthttp.RequestCtx) {
 		ctx.Redirect("/login", http.StatusSeeOther)
 	}
 	tmpl.ExecuteTemplate(ctx, "dashboard.html", nil)
-}
-
-// TODO: display history code in page
-func codeHandler(ctx *fasthttp.RequestCtx) {
-	rid := ctx.FormValue("rid")
-	if rid == "" {
-		ctx.Error(fasthttp.StatusText(400), http.StatusBadRequest)
-		return
-	}
 }

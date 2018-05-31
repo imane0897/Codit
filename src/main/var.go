@@ -19,7 +19,7 @@ var err error
 // id   |   varchar(30)
 // pwd  |   bytea
 type Member struct {
-	ID       []byte
+	ID       string
 	Password []byte
 	Admin    bool
 }
