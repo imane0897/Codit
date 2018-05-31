@@ -6,7 +6,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	_ "html/template"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
