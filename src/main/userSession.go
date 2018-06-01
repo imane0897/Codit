@@ -67,13 +67,13 @@ func alreadyLoggedIn(ctx *fasthttp.RequestCtx) bool {
 	return false
 }
 
-// func isAdmin(ctx *fasthttp.RequestCtx) bool{
-// 	mem := getUser(w, r)
-// 	if mem.Admin == true {
-// 		return true
-// 	}
-// 	return false
-// }
+func isAdmin(ctx *fasthttp.RequestCtx) bool{
+	mem := getUser(ctx)
+	if mem.Admin == true {
+		return true
+	}
+	return false
+}
 
 // func cleanSessions() {
 // 	// TODO:

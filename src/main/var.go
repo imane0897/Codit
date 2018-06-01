@@ -117,14 +117,14 @@ type ProblemInfo struct {
 	State      bool
 }
 
-// ProblemString is used to convey problem info in JSON format
-type ProblemString struct {
-	Pid          int
-	Title        string
-	Description  string
-	Input        string
-	Output       string
-	SampleInput  string
-	SampleOutput string
-	Level        int
+// ProblemBytes contains problem info in bytes
+type ProblemBytes struct {
+	Pid          []byte
+	Title        []byte
+	Description  []byte
+	Input        []byte
+	Output       []byte
+	SampleInput  []byte
+	SampleOutput []byte
+	Level        []byte
 }

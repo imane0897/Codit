@@ -13,10 +13,6 @@ import (
 	"strconv"
 	"sync/atomic"
 	"time"
-	// "net/http"
-	// "os"
-	// "sync/atomic"
-	// "time"
 
 	_ "github.com/lib/pq"
 	"github.com/satori/go.uuid"
@@ -286,10 +282,12 @@ func problemHandler(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
+	ctx.SetContentType("text/html; charset=utf-8")
 	tmpl.ExecuteTemplate(ctx, "problem.html", pb)
 }
 
-func submitHandler(ctx *fasthttp.RequestCtx) {
+func submitPostHandler(ctx *fasthttp.RequestCtx) {
+	compiler := string(ctx.FormValue("compiler"))
 	mem := getUser(ctx)
 	if mem.ID == "" {
 		ctx.Redirect("/login", http.StatusSeeOther)
@@ -298,7 +296,7 @@ func submitHandler(ctx *fasthttp.RequestCtx) {
 
 	// write code to file
 	atomic.AddUint64(&rid, 1)
-	f, err := os.Create("../../filesystem/submissions/" + strconv.FormatUint(rid, 10) + "." + ctx.FormValue("compiler"))
+	f, err := os.Create("../../filesystem/submissions/" + strconv.FormatUint(rid, 10) + "." + compiler)
 	if err != nil {
 		ctx.Error(http.StatusText(500), http.StatusInternalServerError)
 		log.Println("func submitHandler create file error -", err)
@@ -306,7 +304,7 @@ func submitHandler(ctx *fasthttp.RequestCtx) {
 	}
 	defer f.Close()
 
-	_, err = f.WriteString(ctx.FormValue("code"))
+	_, err = f.Write(ctx.FormValue("code"))
 	if err != nil {
 		ctx.Error(http.StatusText(500), http.StatusInternalServerError)
 		log.Println("func submitHandle write file error -", err)
@@ -316,7 +314,7 @@ func submitHandler(ctx *fasthttp.RequestCtx) {
 
 	// get file type
 	var ftype int
-	switch ctx.FormValue("compiler") {
+	switch compiler {
 	case "c":
 		ftype = 0
 	case "c++":
@@ -402,14 +400,15 @@ func statusHandler(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
+	ctx.SetContentType("text/html; charset=utf-8")
 	tmpl.ExecuteTemplate(ctx, "status.html", subs)
 }
 
-func newHandler(ctx *fasthttp.RequestCtx) {
-	pb := ProblemString{}
-	pb.Pid, _ = strconv.Atoi(ctx.FormValue("pid"))
+func newPostHandler(ctx *fasthttp.RequestCtx) {
+	pb := ProblemBytes{}
+	pb.Pid = ctx.FormValue("pid")
 	pb.Title = ctx.FormValue("title")
-	pb.Level, _ = strconv.Atoi(ctx.FormValue("level"))
+	pb.Level = ctx.FormValue("level")
 	pb.Description = ctx.FormValue("description")
 	pb.Input = ctx.FormValue("input")
 	pb.Output = ctx.FormValue("output")
@@ -428,68 +427,66 @@ func newHandler(ctx *fasthttp.RequestCtx) {
 }
 
 func editHandler(ctx *fasthttp.RequestCtx) {
-	// get page or problem info
-	if ctx.Method == http.MethodGet {
-		pid := ctx.FormValue("pid")
-		if pid == "" {
-			ctx.Error(http.StatusText(500), http.StatusInternalServerError)
-			return
-		}
-
-		// get problem info from db
-		row := db.QueryRow("SELECT * FROM problems WHERE pid = $1", pid)
-
-		pb := ProblemString{}
-		err := row.Scan(&pb.Pid, &pb.Title, &pb.Description, &pb.Input, &pb.Output,
-			&pb.SampleInput, &pb.SampleOutput, &pb.Level)
-		switch {
-		case err == sql.ErrNoRows:
-			ctx.NotFound()
-			log.Println("func editHandler problem ", pid, " not found - ", err)
-			return
-		case err != nil:
-			ctx.Error(http.StatusText(500), http.StatusInternalServerError)
-			log.Println("func editHandler problem ", pid, " query error - ", err)
-			return
-		}
-
-		// encode to JSON
-		response, err := json.Marshal(pb)
-		if err != nil {
-			ctx.Error(http.StatusText(500), http.StatusInternalServerError)
-			log.Println("func editHandler JSON marshal err - ", err)
-			return
-		}
-		fmt.Fprintf(w, string(response))
+	pid := ctx.FormValue("pid")
+	if pid == nil {
+		ctx.Error(http.StatusText(500), http.StatusInternalServerError)
+		return
 	}
 
-	// post form
-	if ctx.Method == http.MethodPost {
-		pb := ProblemString{}
-		pb.Pid, _ = strconv.Atoi(ctx.FormValue("pid"))
-		pb.Title = ctx.FormValue("title")
-		pb.Level, _ = strconv.Atoi(ctx.FormValue("level"))
-		pb.Description = ctx.FormValue("description")
-		pb.Input = ctx.FormValue("input")
-		pb.Output = ctx.FormValue("output")
-		pb.SampleInput = ctx.FormValue("sampleinput")
-		pb.SampleOutput = ctx.FormValue("sampleoutput")
+	// get problem info from db
+	row := db.QueryRow("SELECT * FROM problems WHERE pid = $1", pid)
 
-		_, err := db.Exec("UPDATE problems SET title = $1, level = $2, description = $3, input = $4, output = $5, sample_input = $6, sample_output = $7 WHERE pid = $8",
-			pb.Title, pb.Level, pb.Description, pb.Input, pb.Output, pb.SampleInput, pb.SampleOutput, pb.Pid)
-		if err != nil {
-			ctx.Error(http.StatusText(500), http.StatusInternalServerError)
-			log.Println("func editHandler db update error - ", err)
-			return
-		}
-
-		ctx.Redirect("/dashboard", http.StatusSeeOther)
+	pb := ProblemBytes{}
+	err := row.Scan(&pb.Pid, &pb.Title, &pb.Description, &pb.Input, &pb.Output,
+		&pb.SampleInput, &pb.SampleOutput, &pb.Level)
+	switch {
+	case err == sql.ErrNoRows:
+		ctx.NotFound()
+		log.Println("func editHandler problem ", pid, " not found - ", err)
+		return
+	case err != nil:
+		ctx.Error(http.StatusText(500), http.StatusInternalServerError)
+		log.Println("func editHandler problem ", pid, " query error - ", err)
+		return
 	}
+
+	// encode to JSON
+	response, err := json.Marshal(pb)
+	if err != nil {
+		ctx.Error(http.StatusText(500), http.StatusInternalServerError)
+		log.Println("func editHandler JSON marshal err - ", err)
+		return
+	}
+	fmt.Fprintf(ctx, string(response))
+}
+
+func editPostHandler(ctx *fasthttp.RequestCtx) {
+	pb := ProblemBytes{}
+	pb.Pid = ctx.FormValue("pid")
+	pb.Title = ctx.FormValue("title")
+	pb.Level = ctx.FormValue("level")
+	pb.Description = ctx.FormValue("description")
+	pb.Input = ctx.FormValue("input")
+	pb.Output = ctx.FormValue("output")
+	pb.SampleInput = ctx.FormValue("sampleinput")
+	pb.SampleOutput = ctx.FormValue("sampleoutput")
+
+	_, err := db.Exec("UPDATE problems SET title = $1, level = $2, description = $3, input = $4, output = $5, sample_input = $6, sample_output = $7 WHERE pid = $8",
+		pb.Title, pb.Level, pb.Description, pb.Input, pb.Output, pb.SampleInput, pb.SampleOutput, pb.Pid)
+	if err != nil {
+		ctx.Error(http.StatusText(500), http.StatusInternalServerError)
+		log.Println("func editHandler db update error - ", err)
+		return
+	}
+
+	ctx.Redirect("/dashboard", http.StatusSeeOther)
 }
 
 func dashHandler(ctx *fasthttp.RequestCtx) {
 	if isAdmin(ctx) == false {
 		ctx.Redirect("/login", http.StatusSeeOther)
 	}
+
+	ctx.SetContentType("text/html; charset=utf-8")
 	tmpl.ExecuteTemplate(ctx, "dashboard.html", nil)
 }
