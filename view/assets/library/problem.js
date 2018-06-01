@@ -6,7 +6,7 @@ $(document)
 
         var myCodeMirror = CodeMirror.fromTextArea(document.getElementById("editor"), {
             mode: "cmake",
-            theme: "solarized",
+            theme: "default",
             lineNumbers: true,
             value: "put your code here"
         });
