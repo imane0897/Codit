@@ -25,3 +25,11 @@ func getPidCount(ctx *fasthttp.RequestCtx) {
 
 	fmt.Fprint(ctx, count)
 }
+
+func getAdmin(ctx *fasthttp.RequestCtx) {
+	if(isAdmin(ctx)) {
+		fmt.Fprint(ctx, "ture")
+	} else {
+		fmt.Fprint(ctx, "false")
+	}
+}

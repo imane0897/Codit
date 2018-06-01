@@ -62,6 +62,7 @@ func main() {
 	router.POST("/editproblem", editPostHandler)
 	router.GET("/userinfo", getUserInfo)
 	router.GET("/pidcount", getPidCount)
+	router.GET("/isadmin", getAdmin)
 
 	log.Fatal(fasthttp.ListenAndServe(":9090", router.Handler))
 }

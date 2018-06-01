@@ -1,8 +1,5 @@
 $(document)
     .ready(function () {
-        $.get('/userinfo', function (data) {
-            $('#username').after(data);
-        });
 
         var myCodeMirror = CodeMirror.fromTextArea(document.getElementById("editor"), {
             mode: "cmake",
