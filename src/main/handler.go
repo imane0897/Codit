@@ -417,7 +417,7 @@ func newPostHandler(ctx *fasthttp.RequestCtx) {
 		pb.Pid, pb.Title, pb.Level, pb.Description, pb.Input, pb.Output, pb.SampleInput, pb.SampleOutput)
 	if err != nil {
 		ctx.Error(http.StatusText(500), http.StatusInternalServerError)
-		log.Println("func editHandler db update error - ", err)
+		log.Println("func newPostHandler db update error - ", err)
 		return
 	}
 
@@ -434,7 +434,7 @@ func editHandler(ctx *fasthttp.RequestCtx) {
 	// get problem info from db
 	row := db.QueryRow("SELECT * FROM problems WHERE pid = $1", pid)
 
-	pb := ProblemBytes{}
+	pb := ProblemString{}
 	err := row.Scan(&pb.Pid, &pb.Title, &pb.Description, &pb.Input, &pb.Output,
 		&pb.SampleInput, &pb.SampleOutput, &pb.Level)
 	switch {
@@ -455,7 +455,7 @@ func editHandler(ctx *fasthttp.RequestCtx) {
 		log.Println("func editHandler JSON marshal err - ", err)
 		return
 	}
-	fmt.Fprintf(ctx, string(response))
+	fmt.Fprint(ctx, string(response))
 }
 
 func editPostHandler(ctx *fasthttp.RequestCtx) {
@@ -473,7 +473,7 @@ func editPostHandler(ctx *fasthttp.RequestCtx) {
 		pb.Title, pb.Level, pb.Description, pb.Input, pb.Output, pb.SampleInput, pb.SampleOutput, pb.Pid)
 	if err != nil {
 		ctx.Error(http.StatusText(500), http.StatusInternalServerError)
-		log.Println("func editHandler db update error - ", err)
+		log.Println("func editPostHandler db update error - ", err)
 		return
 	}
 
