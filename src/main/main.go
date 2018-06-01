@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"html/template"
 	"log"
-	// "net/http"
 	"os"
 
 	"github.com/buaazp/fasthttprouter"
