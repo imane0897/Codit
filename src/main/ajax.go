@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -27,9 +28,29 @@ func getPidCount(ctx *fasthttp.RequestCtx) {
 }
 
 func getAdmin(ctx *fasthttp.RequestCtx) {
-	if(isAdmin(ctx)) {
+	if isAdmin(ctx) {
 		fmt.Fprint(ctx, "ture")
 	} else {
 		fmt.Fprint(ctx, "false")
 	}
+}
+
+func getResult(ctx *fasthttp.RequestCtx) {
+	sub := SubmissionResult{}
+	row := db.QueryRow("SELECT result, run_time, memory FROM submissions ORDER BY rid DESC LIMIT 1")
+	err := row.Scan(&sub.Result, &sub.RunTime, &sub.Memory)
+	if err != nil {
+		ctx.Error(http.StatusText(500), 500)
+		log.Println("func getResult scan submission erro -", err)
+		return
+	}
+
+	// encode to JSON
+	response, err := json.Marshal(sub)
+	if err != nil {
+		ctx.Error(http.StatusText(500), http.StatusInternalServerError)
+		log.Println("func getResult JSON marshal err - ", err)
+		return
+	}
+	fmt.Fprint(ctx, string(response))
 }

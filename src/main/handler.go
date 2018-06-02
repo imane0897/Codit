@@ -331,8 +331,7 @@ func submitPostHandler(ctx *fasthttp.RequestCtx) {
 		log.Println("func submitHandler insert submission info error -", err)
 		return
 	}
-
-	ctx.Redirect("/status", http.StatusSeeOther)
+	getResult(ctx)
 }
 
 func statusHandler(ctx *fasthttp.RequestCtx) {

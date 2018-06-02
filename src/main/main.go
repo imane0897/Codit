@@ -60,9 +60,11 @@ func main() {
 	router.GET("/editproblem", editHandler)
 	router.POST("/newproblem", newPostHandler)
 	router.POST("/editproblem", editPostHandler)
-	router.GET("/userinfo", getUserInfo)
+	// ajax
 	router.GET("/pidcount", getPidCount)
+	router.GET("/userinfo", getUserInfo)
 	router.GET("/isadmin", getAdmin)
+	router.GET("/result", getResult)
 
 	log.Fatal(fasthttp.ListenAndServe(":9090", router.Handler))
 }

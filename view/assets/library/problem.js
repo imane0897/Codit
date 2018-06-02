@@ -42,4 +42,47 @@ $(document)
                 }
             }
         });
+
+        $('#code-submit').submit(function (event) {
+            $('#result').remove();
+            $(this).after("<br>" +
+                    "<div id=\"result\">"+
+                    "<h3>Submission Result: " +
+                    "<span id=\"res\" class=\"pending\">Pending</span>" +
+                    "<div class=\"ui tiny active inline loader\"></div>"+
+                    "</h3>"+
+                    "</div>");
+            var url = "/submit";
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $(this).serialize(),
+                success: function (data) {
+                    $('#res').removeClass('pending');
+                    var obj = jQuery.parseJSON(data);
+                    var res = obj.Result;
+                    alert(obj.Result);
+                    if (res == "1") {
+                        $('#res').addClass('accept');
+                        $('#res').text('Accept');
+                    } else {
+                        $('#res').addClass('error');
+                        if (res == "2") {
+                            $('#res').text('Wrong Answer');
+                        } else if (res == "3") {
+                            $('#res').text('Compile Error');
+                        } else if (res == "4") {
+                            $('#res').text('Runtime Error');
+                        } else if (res == "5") {
+                            $('#res').text('Time Limit Exceeded');
+                        } else {
+                            $('#res').text('System Error');
+                        }
+                    }
+                    $('.ui.tiny.active.inline.loader').remove();
+                }
+            });
+            event.preventDefault();
+        });
     });
+

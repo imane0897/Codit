@@ -25,9 +25,10 @@
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/components/table.min.css">
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/components/form.min.css">
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/components/message.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.38.0/codemirror.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.38.0/theme/default.min.css">
-  <link rel="stylesheet" href="../../view/assets/library/pages.css">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/components/loader.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.38.0/codemirror.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.38.0/theme/default.min.css">
+  <link rel="stylesheet" type="text/css" href="../../view/assets/library/pages.css">
 </head>
 
 <body>
@@ -106,7 +107,7 @@
           <p class="sample">{{.SampleOutput}}</p>
         </div>
         <br>
-        <form id="code-submit" class="ui form" method="post" action="/submit">
+        <form id="code-submit" class="ui form">
           <select class="ui selection dropdown" name="compiler">
             <option value="">Select Compiler</option>
             <option value="c">C</option>
@@ -116,7 +117,7 @@
           <textarea id="editor" name="code"></textarea>
           <div class="ui container">
             <div class="ui error message"></div>
-            <input type="submit" value="Submit" class="ui secondary small button" />
+            <input id="submit" type="submit" value="Submit" class="ui secondary small button" />
           </div>
         </form>
       </div>

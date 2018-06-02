@@ -70,6 +70,13 @@ type Submission struct {
 	Language2  bool
 }
 
+// SubmissionResult is used for result query
+type SubmissionResult struct {
+	Result     int
+	RunTime    int
+	Memory     int
+}
+
 // Session has uuid of cookie and username to record its owner
 // ----------------PostgreSQL----------------
 // uuid          | char(36)

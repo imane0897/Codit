@@ -74,3 +74,16 @@ td.slight-right {
 td.right.aligned.slight-left {
   padding-right: 1em !important;
 }
+
+.pending {
+  color: #08c !important;
+}
+
+.accept {
+  color: #449d44;
+}
+
+.error {
+  color: #d05451;
+}
+
