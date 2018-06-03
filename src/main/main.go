@@ -64,7 +64,6 @@ func main() {
 	router.GET("/pidcount", getPidCount)
 	router.GET("/userinfo", getUserInfo)
 	router.GET("/isadmin", getAdmin)
-	router.GET("/result", getResult)
 
 	log.Fatal(fasthttp.ListenAndServe(":9090", router.Handler))
 }
