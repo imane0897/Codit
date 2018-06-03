@@ -39,8 +39,6 @@ func getResult(ctx *fasthttp.RequestCtx) {
 	sub := SubmissionResult{}
 	row := db.QueryRow("SELECT result, run_time, memory FROM submissions ORDER BY rid DESC LIMIT 1")
 	err := row.Scan(&sub.Result, &sub.RunTime, &sub.Memory)
-	sub.RunTime = 15
-	sub.Memory = 248
 	if err != nil {
 		ctx.Error(http.StatusText(500), 500)
 		log.Println("func getResult scan submission erro -", err)

@@ -48,7 +48,7 @@ $(document)
             $(this).after("<br>" +
                     "<div id=\"result\">"+
                     "<h3>Submission Result: " +
-                    "<span id=\"res\" class=\"pending\">Pending</span>" +
+                    "<span id=\"res\" class=\"pending\">Pending </span>" +
                     "<div class=\"ui tiny active inline loader\"></div>"+
                     "</h3>"+
                     "</div>");
@@ -61,10 +61,10 @@ $(document)
                     $('#res').removeClass('pending');
                     var obj = jQuery.parseJSON(data);
                     var res = obj.Result;
-                    alert(obj.Result);
                     if (res == "1") {
                         $('#res').addClass('accept');
                         $('#res').text('Accept');
+                        $('#result').after("<p class=\"ui floating info message\">Exe. Time:&emsp;&emsp;&emsp;15ms<br>Exe. Memory:&emsp; 248KB</h5>");
                     } else {
                         $('#res').addClass('error');
                         if (res == "2") {
