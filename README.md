@@ -9,6 +9,15 @@ Test on  Ubuntu 16.04.4 x64
 $ sudo apt-get update
 $ sudo apt-get install golang-go
 ```
+- install packages
+```shell
+go get -u github.com/valyala/fasthttp
+go get -u github.com/buaazp/fasthttprouter
+go get -u github.com/lib/pq
+go get -u github.com/satori/go.uuid
+go get -u golang.org/x/crypto/bcrypt
+```
+
 - install PostgreSQL
 ```sh
 $ sudo apt-get install postgresql postgresql-contrib
