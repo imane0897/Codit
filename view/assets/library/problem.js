@@ -44,6 +44,7 @@ $(document)
         });
 
         $('#code-submit').submit(function (event) {
+            $('#submit').prop('disabled', true);
             $('#result').remove();
             $(this).after("<br>" +
                     "<div id=\"result\">"+
